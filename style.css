@@ -77,14 +77,22 @@ h1,h2,h3{line-height:1.2;font-weight:700}
 /* ===== Header ===== */
 .site-header{position:sticky;top:0;z-index:30;background:var(--header-bg);border-bottom:3px solid var(--blue)}
 .bar{display:flex;align-items:center;justify-content:space-between;gap:16px;height:68px}
-.logo{font-family:var(--font-logo);font-weight:400;font-size:1.55rem;letter-spacing:.02em;color:var(--logo)}
+.logo{font-family:var(--font-logo);font-weight:400;font-size:1.55rem;letter-spacing:.02em;color:var(--logo);align-self:flex-start;margin-top:8px;position:relative;z-index:2}
+.logo img{height:240px;width:auto;display:block}
+
+/* Adds space below the header so the hero text isn't covered by the hanging logo */
+.hero{padding-top:200px} 
+
 .nav{display:flex;gap:24px}
 .nav a{color:var(--ink);font-size:.95rem;font-weight:500;padding:4px 0;border-bottom:2px solid transparent}
 .nav a:hover{border-bottom-color:var(--blue-text)}
 .bar-actions{display:flex;align-items:center;gap:10px}
 .menu-btn{display:none}
+
 @media(max-width:900px){
   .menu-btn{display:inline-block}
+  .logo img{height:100px} /* Shrinks the logo for mobile screens */
+  .hero{padding-top:120px} /* Adjusts hero padding for mobile */
   .nav{position:absolute;top:68px;left:0;right:0;background:var(--header-bg);border-bottom:3px solid var(--blue);flex-direction:column;gap:0;padding:8px 20px 16px;display:none}
   .nav.open{display:flex}
   .nav a{padding:12px 0;border-bottom:1px solid var(--line)}
