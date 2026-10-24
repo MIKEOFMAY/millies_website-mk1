@@ -2,13 +2,15 @@
 const CONFIG = {
   whatsapp: "6281297399978",           // country code + number, no "+" or spaces
   businessName: "Millies Laundry",
-  greeting: "Halo Millies, saya mau laundry."
+  greeting: "Halo, saya mau laundry."
 };
 
 // ===== WhatsApp links =====
 const waBase = "https://wa.me/" + CONFIG.whatsapp;
 document.querySelectorAll("[data-wa]").forEach(function (a) {
-  a.href = waBase + "?text=" + encodeURIComponent(CONFIG.greeting + " (" + CONFIG.businessName + ")");
+  // a button can carry its own message: <a data-wa data-wa-msg="Halo, saya mau tanya dry clean.">
+  const msg = a.getAttribute("data-wa-msg") || CONFIG.greeting;
+  a.href = waBase + "?text=" + encodeURIComponent(msg + " (" + CONFIG.businessName + ")");
 });
 
 // ===== Mobile menu =====
@@ -41,10 +43,20 @@ document.getElementById("themeToggle").addEventListener("click", function () {
 const estService = document.getElementById("estService");
 const estKg = document.getElementById("estKg");
 const estTotal = document.getElementById("estTotal");
+const estWa = document.getElementById("estWa");
 function updateEstimate() {
-  const price = parseFloat(estService.value) || 0;
+  const opt = estService.options[estService.selectedIndex];
+  const min = parseFloat(opt.dataset.min) || 0;
+  const max = parseFloat(opt.dataset.max) || min;
   const kg = parseFloat(estKg.value) || 0;
-  estTotal.textContent = "Rp " + Math.round(price * kg).toLocaleString("id-ID");
+  const round = function (n) { return Math.round(n / 500) * 500; };       // nearest Rp 500
+  const fmt = function (n) { return n.toLocaleString("id-ID"); };
+  const lo = round(min * kg), hi = round(max * kg);
+  estTotal.textContent = lo === hi ? "Rp " + fmt(lo) : "Rp " + fmt(lo) + " – " + fmt(hi);
+  if (estWa) {   // the button opens WhatsApp with the customer's choice already typed in
+    const msg = "Halo, saya mau laundry " + opt.value + " sekitar " + kg + " kg (perkiraan " + estTotal.textContent + "). Bisa dibantu?";
+    estWa.href = waBase + "?text=" + encodeURIComponent(msg + " (" + CONFIG.businessName + ")");
+  }
 }
 estService.addEventListener("change", updateEstimate);
 estKg.addEventListener("input", updateEstimate);
@@ -53,12 +65,16 @@ updateEstimate();
 // ===== Testimonial carousel =====
 const carousel = document.getElementById("carousel");
 function slide(dir) {
+  if (!carousel) return;
   const card = carousel.querySelector(".quote");
   const step = card ? card.getBoundingClientRect().width + 18 : 320;
   carousel.scrollBy({ left: dir * step, behavior: "smooth" });
 }
-document.getElementById("tPrev").addEventListener("click", function () { slide(-1); });
-document.getElementById("tNext").addEventListener("click", function () { slide(1); });
+// these buttons can be deleted from the HTML (e.g. when a Google Reviews widget replaces the carousel)
+const tPrev = document.getElementById("tPrev");
+const tNext = document.getElementById("tNext");
+if (tPrev) tPrev.addEventListener("click", function () { slide(-1); });
+if (tNext) tNext.addEventListener("click", function () { slide(1); });
 
 // ===== Order tracking via WhatsApp =====
 document.getElementById("trackForm").addEventListener("submit", function (e) {
@@ -209,3 +225,17 @@ document.querySelectorAll("a[href^='http']").forEach(function (a) {
     }
   });
 })();
+
+// ===== Shrink the big logo once the visitor scrolls (so it stops covering the content) =====
+(function () {
+  const header = document.querySelector(".site-header");
+  if (!header) return;
+  function update() { header.classList.toggle("scrolled", window.scrollY > 40); }
+  window.addEventListener("scroll", update, { passive: true });
+  update();
+})();
+
+// ===== Footer year (updates itself every January) =====
+// In the HTML write:  © <span id="year">2026</span> Millie's Laundry
+const yearEl = document.getElementById("year");
+if (yearEl) yearEl.textContent = new Date().getFullYear();
