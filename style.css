@@ -7,8 +7,18 @@
    (convert .ttf/.otf to .woff2 on transfonter.org). Check the font's licence allows web use. */
 @font-face{
   font-family:"Weltron 2001";
-  src:local("Weltron 2001"),url("fonts/weltron-2001.woff2") format("woff2");
+  src:url("assets/fonts/WeltronSpecialPower.woff2") format("woff2"),
+      url("assets/fonts/WeltronSpecialPower.woff") format("woff");
+  font-weight: 400;
+  font-style: normal;    
   font-display:swap;
+}
+
+@font-face{
+  font-family:"Futura BT";
+  src:url("assets/fonts/futurabt-heavy.woff2") format("woff2"),
+      url("assets/fonts/futurabt-heavy.woff") format("woff");
+  font-weight:800; font-style:normal; font-display:swap;
 }
 
 /* ===== Tokens =====
@@ -52,7 +62,7 @@ html{scroll-behavior:smooth;scroll-padding-top:80px}
 body{font-family:var(--font-body);color:var(--ink);background:var(--bg);line-height:1.6;transition:background .2s,color .2s}
 a{color:inherit;text-decoration:none}
 img,iframe{max-width:100%}
-h1,h2,h3{line-height:1.2;font-weight:700}
+h1,h2,h3{line-height:1.2;font-family:"Futura BT",var(--font-body);font-weight:800}
 .wrap{max-width:1120px;margin:0 auto;padding:0 20px}
 .narrow{max-width:780px}
 .center{text-align:center;margin-top:28px}
@@ -80,9 +90,6 @@ h1,h2,h3{line-height:1.2;font-weight:700}
 .logo{font-family:var(--font-logo);font-weight:400;font-size:1.55rem;letter-spacing:.02em;color:var(--logo);align-self:flex-start;margin-top:8px;position:relative;z-index:2}
 .logo img{height:240px;width:auto;display:block}
 
-/* Adds space below the header so the hero text isn't covered by the hanging logo */
-.hero{padding-top:200px} 
-
 .nav{display:flex;gap:24px}
 .nav a{color:var(--ink);font-size:.95rem;font-weight:500;padding:4px 0;border-bottom:2px solid transparent}
 .nav a:hover{border-bottom-color:var(--blue-text)}
@@ -92,7 +99,6 @@ h1,h2,h3{line-height:1.2;font-weight:700}
 @media(max-width:900px){
   .menu-btn{display:inline-block}
   .logo img{height:100px} /* Shrinks the logo for mobile screens */
-  .hero{padding-top:120px} /* Adjusts hero padding for mobile */
   .nav{position:absolute;top:68px;left:0;right:0;background:var(--header-bg);border-bottom:3px solid var(--blue);flex-direction:column;gap:0;padding:8px 20px 16px;display:none}
   .nav.open{display:flex}
   .nav a{padding:12px 0;border-bottom:1px solid var(--line)}
@@ -101,6 +107,11 @@ h1,h2,h3{line-height:1.2;font-weight:700}
 
 /* ===== Hero (always brand yellow) ===== */
 .hero{background:radial-gradient(circle at 85% 10%,var(--main-soft),var(--main) 55%);color:var(--brown);padding:84px 0 92px}
+
+/* Extra top space so the hanging logo doesn't cover the hero text.
+   Must come AFTER the main .hero rule, otherwise its padding shorthand overrides this. */
+.hero{padding-top:200px}
+@media(max-width:900px){.hero{padding-top:120px}}
 .hero-grid{display:grid;gap:40px;grid-template-columns:1.3fr 1fr;align-items:center}
 @media(max-width:860px){.hero-grid{grid-template-columns:1fr}}
 .eyebrow{display:flex;align-items:center;gap:10px;text-transform:uppercase;letter-spacing:.14em;font-size:.8rem;font-weight:600;margin-bottom:14px}
@@ -206,3 +217,37 @@ input:focus,select:focus{outline:2px solid var(--blue-text);outline-offset:1px}
   html{scroll-behavior:auto}
   .reveal{opacity:1;transform:none;transition:none}
 }
+
+/* ===== Bubble transition ===== */
+:root{--wash:rgba(43,117,183,.86)}
+:root[data-theme="dark"]{--wash:rgba(16,40,68,.9)}
+
+.bubble-overlay{position:fixed;inset:0;z-index:100;overflow:hidden;pointer-events:none}
+.bubble-wash{position:absolute;inset:0;background:var(--wash);opacity:0}
+
+.bubble{
+  position:absolute;top:0;left:0;
+  width:var(--size);height:var(--size);
+  margin:calc(var(--size) / -2) 0 0 calc(var(--size) / -2);
+  border-radius:50%;
+  will-change:transform;
+  background:
+    radial-gradient(circle at 73% 77%, rgba(255,255,255,.55) 0 1.6%, rgba(255,255,255,0) 3.6%),
+    radial-gradient(circle at 50% 50%, transparent 55%, rgba(255,255,255,.06) 68%, rgba(255,255,255,.22) 100%);
+  box-shadow:
+    inset 0 0 calc(var(--size) * .08) rgba(255,255,255,.25),
+    inset calc(var(--size) * .06) calc(var(--size) * -.08) calc(var(--size) * .18) rgba(120,210,255,.18),
+    inset calc(var(--size) * .06) calc(var(--size) * -.06) calc(var(--size) * .16) rgba(255,140,220,.16),
+    0 0 0 1px rgba(255,255,255,.35);
+}
+/* rainbow soap-film ring that slowly rotates */
+.bubble::before{
+  content:"";position:absolute;inset:0;border-radius:50%;
+  background:conic-gradient(#ff8fd8,#ffd879,#8dffd0,#79cfff,#b98cff,#ff8fd8);
+  -webkit-mask:radial-gradient(closest-side, transparent 62%, #000 84%, #000 100%);
+  mask:radial-gradient(closest-side, transparent 62%, #000 84%, #000 100%);
+  opacity:.55;mix-blend-mode:screen;
+  animation:swirl var(--swirl,9s) linear infinite;
+}
+@keyframes swirl{to{transform:rotate(360deg)}}
+@media(prefers-reduced-motion:reduce){.bubble-overlay{display:none}}

@@ -1,7 +1,7 @@
 // ===== Settings: edit these =====
 const CONFIG = {
-  whatsapp: "62XXXXXXXXXX",           // country code + number, no "+" or spaces
-  businessName: "[NAMA LAUNDRY]",
+  whatsapp: "6281297399978",           // country code + number, no "+" or spaces
+  businessName: "Millies Laundry",
   greeting: "Halo, saya mau laundry."
 };
 
@@ -81,3 +81,126 @@ if ("IntersectionObserver" in window) {
 } else {
   items.forEach(function (el) { el.classList.add("in"); });
 }
+
+// ===== Bubble page transition (GSAP) =====
+// Needs the GSAP <script> tag in index.html. If GSAP fails to load, links still work normally.
+
+// External links (WhatsApp, Instagram, Google) open in a new tab so visitors stay on your site
+document.querySelectorAll("a[href^='http']").forEach(function (a) {
+  if (a.host !== location.host) { a.target = "_blank"; a.rel = "noopener noreferrer"; }
+});
+
+(function () {
+  if (!window.gsap) return;
+
+  const layer = document.getElementById("bubble-layer");
+  if (!layer) return;
+  const wash = layer.querySelector(".bubble-wash");
+  const page = document.querySelector("main");
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const rand = function (min, max) { return Math.random() * (max - min) + min; };
+  let busy = false;
+
+  function makeBubble(size) {
+    const el = document.createElement("span");
+    el.className = "bubble";
+    el.style.setProperty("--size", size + "px");
+    el.style.setProperty("--swirl", rand(6, 12) + "s");
+    layer.appendChild(el);
+    return el;
+  }
+
+  // Full-screen bubbles rise, the page changes at the midpoint (onMid), then everything clears. ~1.5s total.
+  function runTransition(onMid) {
+    if (reduceMotion) { onMid(); return; }
+    busy = true;
+
+    const W = window.innerWidth, H = window.innerHeight;
+    const count = Math.round(Math.min(70, Math.max(26, W / 18)));
+    const maxSize = Math.min(200, W * 0.38);
+    const made = [];
+
+    for (let i = 0; i < count; i++) {
+      const size = rand(40, maxSize);
+      const el = makeBubble(size);
+      el.style.left = rand(0, W) + "px";
+      made.push({ el: el, size: size });
+    }
+
+    const tl = gsap.timeline({
+      onComplete: function () {
+        made.forEach(function (b) { gsap.killTweensOf(b.el); b.el.remove(); });
+        gsap.set([wash, page], { clearProps: "opacity" });
+        busy = false;
+      }
+    });
+
+    // blue "water" wash and page fade out
+    tl.to(wash, { opacity: 1, duration: 0.4, ease: "power1.in" }, 0.1);
+    tl.to(page, { opacity: 0.25, duration: 0.35, ease: "power1.in" }, 0.1);
+
+    // each bubble rises from below the screen to above it, with a side-to-side wobble
+    made.forEach(function (b) {
+      const dur = 0.8 + (b.size / maxSize) * 0.3;      // bigger bubbles rise a bit slower
+      const sway = rand(10, 30);
+      tl.fromTo(b.el, { y: H + b.size }, { y: -b.size * 1.5, duration: dur, ease: "none" }, rand(0, 0.3));
+      gsap.fromTo(b.el, { x: -sway }, { x: sway, duration: rand(0.35, 0.6), yoyo: true, repeat: -1, ease: "sine.inOut" });
+    });
+
+    // screen is covered: swap the page now
+    tl.call(onMid, null, 0.55);
+
+    // reveal the new position
+    tl.to(page, { opacity: 1, duration: 0.45, ease: "power1.out" }, 0.65);
+    tl.to(wash, { opacity: 0, duration: 0.45, ease: "power1.out" }, 0.7);
+  }
+
+  // Small burst of bubbles where the visitor clicked (used for links that open in a new tab)
+  function burst(x, y) {
+    if (reduceMotion) return;
+    for (let i = 0; i < 10; i++) {
+      const el = makeBubble(rand(14, 40));
+      el.style.left = x + "px";
+      el.style.top = y + "px";
+      gsap.fromTo(el,
+        { x: rand(-24, 24), y: 0, scale: 0.3, opacity: 1 },
+        { x: rand(-60, 60), y: -rand(90, 220), scale: 1, opacity: 0, duration: rand(0.7, 1.2), ease: "power1.out",
+          onComplete: function () { el.remove(); } });
+    }
+  }
+
+  // Jump instantly (the page has smooth scrolling in CSS, which would fight the transition)
+  function jumpTo(target) {
+    const html = document.documentElement;
+    const prev = html.style.scrollBehavior;
+    html.style.scrollBehavior = "auto";
+    target.scrollIntoView();
+    html.style.scrollBehavior = prev;
+  }
+
+  document.addEventListener("click", function (e) {
+    const a = e.target.closest("a[href]");
+    if (!a || e.defaultPrevented) return;
+    if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+
+    const href = a.getAttribute("href");
+
+    // in-page links (menu, "Lihat Harga", logo): full bubble transition
+    if (href.length > 1 && href.charAt(0) === "#") {
+      const target = document.getElementById(href.slice(1));
+      if (!target) return;
+      e.preventDefault();
+      if (busy) return;
+      runTransition(function () {
+        jumpTo(target);
+        history.pushState(null, "", href);
+      });
+      return;
+    }
+
+    // external links: bubble burst at the click point, link opens in a new tab
+    if (/^https?:/.test(a.href) && a.host !== location.host) {
+      burst(e.clientX, e.clientY);
+    }
+  });
+})();
