@@ -3,24 +3,6 @@
    very similar font) is loaded as the fallback. Futura is used when available. */
 @import url("https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600;700&display=swap");
 
-/* Weltron 2001 (logo). Put the font file at fonts/weltron-2001.woff2
-   (convert .ttf/.otf to .woff2 on transfonter.org). Check the font's licence allows web use. */
-@font-face{
-  font-family:"Weltron 2001";
-  src:url("assets/fonts/WeltronSpecialPower.woff2") format("woff2"),
-      url("assets/fonts/WeltronSpecialPower.woff") format("woff");
-  font-weight: 400;
-  font-style: normal;    
-  font-display:swap;
-}
-
-@font-face{
-  font-family:"Futura BT";
-  src:url("assets/fonts/futurabt-heavy.woff2") format("woff2"),
-      url("assets/fonts/futurabt-heavy.woff") format("woff");
-  font-weight:800; font-style:normal; font-display:swap;
-}
-
 /* ===== Tokens =====
    Main   #fdb713  ~80%  backgrounds
    Blue   #2b75b7  ~10%  lines, buttons, small accents
@@ -43,7 +25,7 @@
   --radius:16px;
 
   --font-body:Futura,"Futura PT",Jost,"Century Gothic","Trebuchet MS",system-ui,sans-serif;
-  --font-logo:"Weltron 2001",Futura,Jost,"Century Gothic",sans-serif;
+  --font-logo:var(--font-body);
 }
 :root[data-theme="dark"]{
   --bg:#24160a; --bg-alt:#2d1c0d; --card:#3a2510;
@@ -62,7 +44,7 @@ html{scroll-behavior:smooth;scroll-padding-top:80px}
 body{font-family:var(--font-body);color:var(--ink);background:var(--bg);line-height:1.6;transition:background .2s,color .2s}
 a{color:inherit;text-decoration:none}
 img,iframe{max-width:100%}
-h1,h2,h3{line-height:1.2;font-family:"Futura BT",var(--font-body);font-weight:800}
+h1,h2,h3{line-height:1.2;font-weight:700}
 .wrap{max-width:1120px;margin:0 auto;padding:0 20px}
 .narrow{max-width:780px}
 .center{text-align:center;margin-top:28px}
@@ -89,6 +71,10 @@ h1,h2,h3{line-height:1.2;font-family:"Futura BT",var(--font-body);font-weight:80
 .bar{display:flex;align-items:center;justify-content:space-between;gap:16px;height:68px}
 .logo{font-family:var(--font-logo);font-weight:400;font-size:1.55rem;letter-spacing:.02em;color:var(--logo);align-self:flex-start;margin-top:8px;position:relative;z-index:2}
 .logo img{height:240px;width:auto;display:block}
+.logo img{transition:height .25s ease}
+/* when the page is scrolled, JS adds .scrolled and the big logo shrinks so it stops covering the content */
+.site-header.scrolled .logo img{height:56px}
+
 
 .nav{display:flex;gap:24px}
 .nav a{color:var(--ink);font-size:.95rem;font-weight:500;padding:4px 0;border-bottom:2px solid transparent}
@@ -101,6 +87,8 @@ h1,h2,h3{line-height:1.2;font-family:"Futura BT",var(--font-body);font-weight:80
   .logo img{height:100px} /* Shrinks the logo for mobile screens */
   .nav{position:absolute;top:68px;left:0;right:0;background:var(--header-bg);border-bottom:3px solid var(--blue);flex-direction:column;gap:0;padding:8px 20px 16px;display:none}
   .nav.open{display:flex}
+  .nav{padding-top:48px}                         /* clears the 100px logo */
+  .site-header.scrolled .nav{padding-top:8px}    /* logo is small once scrolled */
   .nav a{padding:12px 0;border-bottom:1px solid var(--line)}
   .bar-actions .btn-sm{display:none}
 }

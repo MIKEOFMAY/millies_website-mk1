@@ -2,7 +2,7 @@
 const CONFIG = {
   whatsapp: "6281297399978",           // country code + number, no "+" or spaces
   businessName: "Millies Laundry",
-  greeting: "Halo, saya mau laundry."
+  greeting: "Halo Millies, saya mau laundry."
 };
 
 // ===== WhatsApp links =====
@@ -93,9 +93,14 @@ document.querySelectorAll("a[href^='http']").forEach(function (a) {
 (function () {
   if (!window.gsap) return;
 
-  const layer = document.getElementById("bubble-layer");
+  const layer = document.getElementById("bubble-overlay");
   if (!layer) return;
-  const wash = layer.querySelector(".bubble-wash");
+  let wash = layer.querySelector(".bubble-wash");
+  if (!wash) {                                   // blue water tint: created here, so the HTML only needs the one div
+    wash = document.createElement("div");
+    wash.className = "bubble-wash";
+    layer.prepend(wash);
+  }
   const page = document.querySelector("main");
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const rand = function (min, max) { return Math.random() * (max - min) + min; };
