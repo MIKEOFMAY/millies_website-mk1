@@ -1,7 +1,7 @@
 // ===== Settings: edit these =====
 const CONFIG = {
-  whatsapp: "6281297399978",           // country code + number, no "+" or spaces
-  businessName: "Millies Laundry",
+  whatsapp: "06281297399978",           // country code + number, no "+" or spaces
+  businessName: "Millie's Laundry",
   greeting: "Halo, saya mau laundry."
 };
 
