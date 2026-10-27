@@ -1,6 +1,6 @@
 // ===== Settings: edit these =====
 const CONFIG = {
-  whatsapp: "06281297399978",           // country code + number, no "+" or spaces
+  whatsapp: "6281297399978",           // country code + number, no "+" or spaces
   businessName: "Millie's Laundry",
   greeting: "Halo, saya mau laundry."
 };
@@ -44,23 +44,34 @@ const estService = document.getElementById("estService");
 const estKg = document.getElementById("estKg");
 const estTotal = document.getElementById("estTotal");
 const estWa = document.getElementById("estWa");
+const estLabel = document.getElementById("estQtyLabel");
 function updateEstimate() {
   const opt = estService.options[estService.selectedIndex];
+  const unit = opt.dataset.unit || "kg";
   const min = parseFloat(opt.dataset.min) || 0;
   const max = parseFloat(opt.dataset.max) || min;
-  const kg = parseFloat(estKg.value) || 0;
+  const qty = parseFloat(estKg.value) || 0;
   const round = function (n) { return Math.round(n / 500) * 500; };       // nearest Rp 500
   const fmt = function (n) { return n.toLocaleString("id-ID"); };
-  const lo = round(min * kg), hi = round(max * kg);
+  const lo = round(min * qty), hi = round(max * qty);
   estTotal.textContent = lo === hi ? "Rp " + fmt(lo) : "Rp " + fmt(lo) + " – " + fmt(hi);
-  if (estWa) {   // the button opens WhatsApp with the customer's choice already typed in
-    const msg = "Halo, saya mau laundry " + opt.value + " sekitar " + kg + " kg (perkiraan " + estTotal.textContent + "). Bisa dibantu?";
+  if (estWa) {   // opens WhatsApp with the customer's choice already typed in
+    const msg = "Halo, saya mau " + opt.value + " sekitar " + qty + " " + unit + " (perkiraan " + estTotal.textContent + "). Bisa dibantu?";
     estWa.href = waBase + "?text=" + encodeURIComponent(msg + " (" + CONFIG.businessName + ")");
   }
 }
-estService.addEventListener("change", updateEstimate);
+// when the service changes, switch the label (Berat (kg) / Jumlah (pcs) / ...) and a sensible starting amount
+function onServiceChange() {
+  const opt = estService.options[estService.selectedIndex];
+  const unit = opt.dataset.unit || "kg";
+  if (estLabel) estLabel.textContent = (unit === "kg" ? "Berat (kg)" : unit === "m²" ? "Luas (m²)" : "Jumlah (" + unit + ")");
+  estKg.step = (unit === "kg" || unit === "m²") ? "0.5" : "1";
+  estKg.value = unit === "kg" ? 5 : unit === "m²" ? 4 : 1;
+  updateEstimate();
+}
+estService.addEventListener("change", onServiceChange);
 estKg.addEventListener("input", updateEstimate);
-updateEstimate();
+onServiceChange();
 
 // ===== Testimonial carousel =====
 const carousel = document.getElementById("carousel");

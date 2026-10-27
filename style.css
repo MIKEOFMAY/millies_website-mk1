@@ -65,6 +65,18 @@ h1,h2,h3{line-height:1.2;font-weight:700}
 .btn-light:hover{background:var(--main-soft)}
 .icon-btn{width:40px;height:40px;border-radius:50%;border:2px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer;font-size:1.05rem}
 .icon-btn:hover{border-color:var(--blue-text)}
+ /* Hero button: identical in light and dark mode */
+.hero .btn-ghost,
+:root[data-theme="dark"] .hero .btn-ghost{
+  border-color:#603813 !important;
+  color:#603813 !important;
+  background:transparent !important;
+}
+.hero .btn-ghost:hover,
+:root[data-theme="dark"] .hero .btn-ghost:hover{
+  background:#603813 !important;
+  color:#fdb713 !important;
+}
 
 /* ===== Header ===== */
 .site-header{position:sticky;top:0;z-index:30;background:var(--header-bg);border-bottom:3px solid var(--blue)}
