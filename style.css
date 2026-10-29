@@ -260,3 +260,117 @@ input:focus,select:focus{outline:2px solid var(--blue-text);outline-offset:1px}
 .badge{display:inline-block;background:var(--blue);color:#fff;font-size:.72rem;font-weight:700;letter-spacing:.04em;padding:3px 10px;border-radius:999px;margin-bottom:10px}
 .subhead{margin:44px 0 16px;font-size:1.25rem}
 .estimator .btn{margin-top:16px}
+/* ===== "Mulai dari" prices ===== */
+.price .from{display:block;font-size:.72rem;font-weight:500;letter-spacing:.03em;color:var(--muted);margin-bottom:1px}
+
+/* ===== Paket hemat: 2 wide cards + business card ===== */
+.g2{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.biz{margin-top:18px;display:grid;grid-template-columns:1.5fr 1fr;gap:24px;align-items:center;border:2px solid var(--blue)}
+@media(max-width:800px){.biz{grid-template-columns:1fr}}
+.biz h3{font-size:1.3rem;margin-bottom:8px}
+.biz .price{font-weight:700;font-size:1.15rem;color:var(--blue-text);margin-bottom:12px}
+.biz-cta{display:flex;flex-direction:column;align-items:flex-start}
+.chips{list-style:none;display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.chips li{border:1.5px solid var(--line);border-radius:999px;padding:4px 14px;font-size:.85rem;font-weight:600;color:var(--ink);background:var(--bg-alt)}
+
+/* ===== Hand-drawn frame on hover (subtle) ===== */
+.card,.stats li{position:relative}
+.card::after,.stats li::after{
+  content:"";position:absolute;inset:-4px;border:2px solid var(--blue-text);
+  border-radius:19px 17px 20px 17px / 17px 20px 17px 19px;
+  opacity:0;pointer-events:none;transition:opacity .25s;
+}
+@media(hover:hover){
+  .card:hover::after,.stats li:hover::after{opacity:.55}
+}
+@media(prefers-reduced-motion:no-preference){
+  @media(hover:hover){
+    .card:hover::after,.stats li:hover::after{animation:wiggle 1.6s ease-in-out infinite}
+  }
+}
+@keyframes wiggle{
+  0%,100%{transform:rotate(-.25deg) translate(.5px,-.5px)}
+  50%    {transform:rotate(.25deg)  translate(-.5px,.5px)}
+}
+
+/* ===== Small bubbles that float up after ~3s of hovering a card ===== */
+.card-bubble{pointer-events:none;z-index:3}
+.card-bubble.bubble{
+  border:1.5px solid rgba(43,117,183,.55);
+  box-shadow:inset 0 0 6px rgba(43,117,183,.12);
+}
+.card-bubble.bubble::before{mix-blend-mode:normal;opacity:.3}
+
+/* ===== Price list tabs ===== */
+.tabs{display:flex;gap:8px;overflow-x:auto;padding:4px 2px 10px;scrollbar-width:thin}
+.tab{flex:0 0 auto;padding:9px 18px;border-radius:999px;border:2px solid var(--blue);background:transparent;color:var(--blue-text);font:inherit;font-weight:600;font-size:.95rem;cursor:pointer;white-space:nowrap;transition:background .15s,color .15s}
+.tab:hover{background:rgba(43,117,183,.12)}
+.tab[aria-selected="true"]{background:var(--blue);color:#fff}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:8px 24px 22px;box-shadow:var(--shadow);margin-bottom:14px}
+.panel[hidden]{display:none}
+.plist{list-style:none}
+.plist li{display:flex;justify-content:space-between;align-items:baseline;gap:16px;padding:13px 0;border-bottom:1px solid var(--line)}
+.pname{font-weight:600}
+.pprice{text-align:right;font-weight:700;color:var(--blue-text);white-space:nowrap}
+.pprice small{font-weight:500;color:var(--muted);font-size:.78rem}
+.panel .note{margin:12px 0 14px}
+@media(max-width:560px){
+  .panel{padding:4px 16px 18px}
+  .plist li{flex-direction:column;align-items:flex-start;gap:2px}
+  .pprice{text-align:left}
+}
+
+/* ===== Photos (placeholders show until the real file exists) ===== */
+.media{position:relative;margin:0;border-radius:var(--radius);overflow:hidden;background:var(--bg-alt);border:1px solid var(--line);box-shadow:var(--shadow);aspect-ratio:4/3}
+.media img,.media video{display:block;width:100%;height:100%;object-fit:cover}
+.media.missing{display:flex;align-items:center;justify-content:center;text-align:center;padding:16px;
+  border:2px dashed var(--blue);box-shadow:none;
+  background:repeating-linear-gradient(135deg,rgba(43,117,183,.07) 0 14px,rgba(43,117,183,.12) 14px 28px),var(--bg-alt)}
+.media.missing::before{content:"📷";display:block;font-size:1.8rem;margin-bottom:6px}
+.media.missing::after{content:attr(data-label);display:block;font-size:.85rem;font-weight:600;color:var(--blue-text)}
+.media.missing{flex-direction:column}
+.media figcaption{position:absolute;left:0;right:0;bottom:0;padding:22px 14px 10px;color:#fff;font-size:.88rem;font-weight:600;background:linear-gradient(transparent,rgba(40,22,8,.7))}
+.media.missing figcaption{display:none}
+
+.hero-side{display:grid;gap:14px}
+.media-hero{aspect-ratio:16/10}
+
+
+/* ===== Price note ===== */
+.asof{font-weight:500;color:var(--muted);font-size:.8rem;margin-left:6px}
+.disclaimer{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--blue);border-radius:12px;padding:14px 18px;margin:6px 0 4px}
+.disclaimer strong{display:block;margin-bottom:4px}
+.disclaimer p{color:var(--muted);font-size:.92rem}
+
+/* ===== Small photo inside service / package cards ===== */
+.smedia{position:relative;width:100%;margin-bottom:14px}
+.media-card{aspect-ratio:16/9;box-shadow:none;border-radius:12px}
+.media-card.missing{padding:8px;border-width:1.5px}
+.media-card.missing::before{font-size:1.3rem;margin-bottom:2px}
+.media-card.missing::after{font-size:.74rem}
+.smedia .badge{position:absolute;top:10px;left:10px;margin:0;z-index:2}
+.subhead-note{margin:-8px 0 16px;color:var(--muted)}
+.biz{grid-template-columns:.9fr 1.5fr 1fr}
+.biz-media .media-card{height:100%;min-height:150px}
+@media(max-width:1000px){.biz{grid-template-columns:1fr 1fr}.biz-media{grid-column:1/-1}}
+@media(max-width:800px){.biz{grid-template-columns:1fr}}
+
+/* ===== "Cara Kami Mencuci": zoom each step on hover ===== */
+.steps li{padding:14px 12px;border-radius:var(--radius);transition:transform .25s ease,box-shadow .25s ease,background .25s ease}
+.steps b{transition:transform .25s ease}
+@media(hover:hover){
+  .steps li:hover{background:var(--card);box-shadow:var(--shadow);z-index:2}
+}
+@media(prefers-reduced-motion:no-preference){
+  @media(hover:hover){
+    .steps li:hover{transform:scale(1.08)}
+    .steps li:hover b{transform:scale(1.15)}
+  }
+  .steps li:active{transform:scale(1.05)}
+}
+.g2 .media-card{aspect-ratio:21/9}   /* the two wide package cards: a shorter strip, so the photo isn't huge */
+
+/* ===== Price list groups + small notes ===== */
+.pgroup{font-size:.78rem;text-transform:uppercase;letter-spacing:.12em;color:var(--blue-text);margin:20px 0 0}
+.pgroup:first-child{margin-top:14px}
+.pname small.pnote{display:block;font-weight:400;color:var(--muted);font-size:.8rem;margin-top:1px}

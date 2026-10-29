@@ -57,6 +57,7 @@
       <a href="#lokasi">Lokasi</a>
     </nav>
     <div class="bar-actions">
+      <button id="soundToggle" class="icon-btn" type="button" aria-label="Suara klik: nyala" aria-pressed="true" title="Suara klik">🔊</button>
       <button id="themeToggle" class="icon-btn" type="button" aria-label="Ganti tema">◐</button>
       <a class="btn btn-wa btn-sm" data-wa href="https://wa.me/6281297399978">Laundry Sekarang</a>
       <button id="menuToggle" class="icon-btn menu-btn" type="button" aria-label="Buka menu" aria-expanded="false" aria-controls="nav">☰</button>
@@ -69,156 +70,331 @@
   <section class="hero">
     <div class="wrap hero-grid">
       <div>
-        <p class="eyebrow">Laundry & Dry Clean · Permata Hijau Suites, Jakarta Selatan</p>
-        <h1>Waktu Anda Hemat, Hasil Maksimal, Semua Kami Bereskan.</h1>
-        <p class="lead">Solusi laundry lengkap tanpa ribet: kiloan, sepatu, tas, hingga dry clean. Wangi tahan lama, setrikaan rapi, Anda tinggal santai.</p>
+        <p class="eyebrow">Laundry · Permata Hijau Suites</p>
+        <h1>Cucian beres. Hidup lega.</h1>
+        <p class="lead">Kiloan, sepatu, tas, dry clean. Kami jemput, cuci, dan antar.</p>
         <div class="cta-row">
-          <a class="btn btn-wa" data-wa href="https://wa.me/6281297399978">Pesan via WhatsApp</a>
+          <a class="btn btn-wa" data-wa href="https://wa.me/6281297399978">Pesan di WhatsApp</a>
           <a class="btn btn-ghost" href="#layanan">Lihat Harga</a>
         </div>
       </div>
-      <ul class="stats" aria-label="Ringkasan">
-        <li><strong>300+</strong><span>Pelanggan puas sejak 2021</span></li>
-        <li><strong>40+</strong><span>Jenis layanan</span></li>
-        <li><strong>12–24 jam</strong><span>Layanan express</span></li>
+      <div class="hero-side">
+        <figure class="media media-hero" data-label="Foto utama · cucian rapi dan wangi"><img src="assets/photos/hero.jpg" alt="Cucian rapi, bersih, dan wangi dari Millie's Laundry" width="1200" height="750" fetchpriority="high" onerror="this.parentElement.classList.add('missing');this.remove()"></figure>
+        <ul class="stats" aria-label="Ringkasan">
+        <li><strong>300+</strong><span>Pelanggan puas</span></li>
+        <li><strong>30+</strong><span>Jenis layanan</span></li>
+        <li><strong>12–24 jam</strong><span>Express</span></li>
         <li><strong>Gratis</strong><span>Antar-jemput*</span></li>
       </ul>
+      </div>
     </div>
   </section>
 
   <section id="keunggulan" class="section">
     <div class="wrap">
-      <h2>Kenapa pilih Millie's?</h2>
-      <p class="sub">Baju bersih, hari pun lega. Noda kabur, bau pamit, kerut minggat. Yang tersisa cuma rapi, wangi, dan senyum di ujung hari.</p>
+      <h2>Kenapa Millie's?</h2>
+      <p class="sub">Noda hilang. Bau hilang. Kusut hilang.</p>
       <div class="grid g4 reveal">
-        <article class="card"><span class="ico">✔</span><h3>Perawatan Bertahap</h3><p>Setiap item disortir, dibersihkan sesuai label perawatan, disetrika, lalu dicek kualitasnya sebelum dikemas.</p></article>
-        <article class="card"><span class="ico">★</span><h3>Komitmen Kualitas</h3><p>Ada yang kurang bersih? Kirim foto lewat WhatsApp dalam 24 jam setelah diterima. Kami periksa, dan jika memang perlu, kami cuci ulang tanpa biaya.*</p></article>
-        <article class="card"><span class="ico">💧</span><h3>Lembut untuk Keluarga</h3><p>Deterjen dan pewangi lembut untuk kulit. Beri tahu kami jika ada alergi atau kebutuhan khusus.</p></article>
-        <article class="card"><span class="ico">₨</span><h3>Harga Jelas</h3><p>Perawatan berkualitas dengan harga yang kami konfirmasi sebelum cucian diproses.</p></article>
-        <article class="card"><span class="ico">🚚</span><h3>Antar-Jemput</h3><p>Penjemputan dan pengantaran terjadwal ke rumah atau kantor Anda, sesuai alamat yang dikonfirmasi.*</p></article>
-        <article class="card"><span class="ico">⏱</span><h3>Estimasi Jelas</h3><p>Estimasi waktu kami sampaikan di awal, dan opsi express tersedia sesuai kebutuhan Anda.</p></article>
-        <article class="card"><span class="ico">🔎</span><h3>Pantau Pesanan</h3><p>Tanyakan status cucian kapan saja lewat WhatsApp pada jam operasional.</p></article>
-        <article class="card"><span class="ico">☎</span><h3>Selalu Bisa Dihubungi</h3><p>Ada kendala atau pertanyaan? Tim kami siap merespons dan mencari solusi yang adil.</p></article>
+        <article class="card"><span class="ico">✔</span><h3>Dicuci Teliti</h3><p>Dipilah, dicuci sesuai label, disetrika, lalu dicek lagi.</p></article>
+        <article class="card"><span class="ico">★</span><h3>Cuci Ulang*</h3><p>Kurang bersih? Kirim foto dalam 24 jam. Kami cek, lalu cuci ulang kalau perlu.</p></article>
+        <article class="card"><span class="ico">💧</span><h3>Lembut di Kulit</h3><p>Deterjen lembut. Ada alergi? Kabari kami.</p></article>
+        <article class="card"><span class="ico">₨</span><h3>Harga Jelas</h3><p>Harga kami kabari dulu sebelum cucian dicuci.</p></article>
+        <article class="card"><span class="ico">🚚</span><h3>Antar-Jemput</h3><p>Kami jemput dan antar ke rumah atau kantor.*</p></article>
+        <article class="card"><span class="ico">⏱</span><h3>Waktu Jelas</h3><p>Estimasi selesai diberi di awal. Express juga ada.</p></article>
+        <article class="card"><span class="ico">🔎</span><h3>Cek Status</h3><p>Tanya status cucian lewat WhatsApp kapan saja.</p></article>
+        <article class="card"><span class="ico">☎</span><h3>Mudah Dihubungi</h3><p>Ada masalah? Chat kami. Kami bantu cari solusi.</p></article>
       </div>
-      <p class="note">*Gratis antar-jemput untuk order minimal Rp 100.000 dalam radius sekitar 5 km. Cuci ulang berlaku untuk keluhan yang dilaporkan dalam 24 jam, 1 kali per item. Selengkapnya di FAQ.</p>
+      <p class="note">*Antar-jemput gratis: order min. Rp 100.000, radius ±5 km. Cuci ulang: lapor dalam 24 jam, 1× per item. Detail di FAQ.</p>
     </div>
   </section>
 
   <section id="layanan" class="section alt">
     <div class="wrap">
       <h2>Layanan & Harga</h2>
-      <p class="sub">Semua harga perkiraan. Harga final akan dikonfirmasi lewat WhatsApp sebelum cucian diproses.</p>
+      <p class="sub">Harga per <span class="price-year">2026</span>, mulai dari. Harga pasti kami kabari lewat WhatsApp sebelum cucian dicuci.</p>
 
       <div class="grid g4 reveal">
         <article class="card service">
-          <span class="badge">Paling populer</span>
+          <div class="smedia"><figure class="media media-card" data-label="Foto · kiloan reguler"><img src="assets/photos/layanan-reguler.jpg" alt="Kiloan reguler" width="640" height="360" loading="lazy" onerror="this.parentElement.classList.add('missing');this.remove()"></figure><span class="badge">Paling populer</span></div>
           <h3>Kiloan Reguler</h3>
           <p>Cuci, kering, setrika.</p>
-          <div class="price">Mulai Rp 15.000<small>/kg</small></div>
+          <div class="price"><small class="from">Mulai dari</small>Rp 20.000<small>/kg</small></div>
           <a class="btn btn-ghost btn-sm" data-wa data-wa-msg="Halo, saya mau tanya laundry kiloan reguler." href="https://wa.me/6281297399978">Tanya harga</a>
         </article>
         <article class="card service">
+          <div class="smedia"><figure class="media media-card" data-label="Foto · laundry express"><img src="assets/photos/layanan-express.jpg" alt="Laundry express" width="640" height="360" loading="lazy" onerror="this.parentElement.classList.add('missing');this.remove()"></figure></div>
           <h3>Express</h3>
-          <p>Selesai dalam 12–24 jam.</p>
-          <div class="price">Rp 25.000 – 35.000<small>/kg</small></div>
+          <p>Jadi dalam 12–24 jam.</p>
+          <div class="price"><small class="from">Mulai dari</small>Rp 28.000<small>/kg</small></div>
           <a class="btn btn-ghost btn-sm" data-wa data-wa-msg="Halo, saya mau tanya laundry express." href="https://wa.me/6281297399978">Tanya harga</a>
         </article>
         <article class="card service">
+          <div class="smedia"><figure class="media media-card" data-label="Foto · dry clean"><img src="assets/photos/layanan-dryclean.jpg" alt="Dry clean" width="640" height="360" loading="lazy" onerror="this.parentElement.classList.add('missing');this.remove()"></figure></div>
           <h3>Dry Clean</h3>
-          <p>Jas, gaun, blazer, kebaya. Harga tergantung bahan.</p>
-          <div class="price">Rp 35.000 – 75.000<small>/pcs</small></div>
+          <p>Jas, gaun, blazer, kebaya.</p>
+          <div class="price"><small class="from">Mulai dari</small>Rp 45.000<small>/pcs</small></div>
           <a class="btn btn-ghost btn-sm" data-wa data-wa-msg="Halo, saya mau tanya dry clean." href="https://wa.me/6281297399978">Tanya harga</a>
         </article>
         <article class="card service">
+          <div class="smedia"><figure class="media media-card" data-label="Foto · cuci sepatu"><img src="assets/photos/layanan-sepatu.jpg" alt="Cuci sepatu" width="640" height="360" loading="lazy" onerror="this.parentElement.classList.add('missing');this.remove()"></figure></div>
           <h3>Cuci Sepatu</h3>
-          <p>Sneakers, kulit, suede. Kirim foto, kami kasih harga pas.</p>
-          <div class="price">Rp 60.000 – 120.000<small>/pasang</small></div>
+          <p>Sneakers, kulit, suede. Kirim foto dulu.</p>
+          <div class="price"><small class="from">Mulai dari</small>Rp 85.000<small>/pasang</small></div>
           <a class="btn btn-ghost btn-sm" data-wa data-wa-msg="Halo, saya mau cuci sepatu. Ini fotonya:" href="https://wa.me/6281297399978">Kirim foto</a>
         </article>
         <article class="card service">
+          <div class="smedia"><figure class="media media-card" data-label="Foto · cuci tas"><img src="assets/photos/layanan-tas.jpg" alt="Cuci tas" width="640" height="360" loading="lazy" onerror="this.parentElement.classList.add('missing');this.remove()"></figure></div>
           <h3>Cuci Tas</h3>
-          <p>Perawatan tas harian dan premium.</p>
-          <div class="price">Mulai Rp 75.000<small>/pcs</small></div>
+          <p>Tas harian sampai premium.</p>
+          <div class="price"><small class="from">Mulai dari</small>Rp 115.000<small>/pcs</small></div>
           <a class="btn btn-ghost btn-sm" data-wa data-wa-msg="Halo, saya mau cuci tas. Ini fotonya:" href="https://wa.me/6281297399978">Kirim foto</a>
         </article>
         <article class="card service">
+          <div class="smedia"><figure class="media media-card" data-label="Foto · bedcover dan selimut"><img src="assets/photos/layanan-bedcover.jpg" alt="Bedcover dan selimut" width="640" height="360" loading="lazy" onerror="this.parentElement.classList.add('missing');this.remove()"></figure></div>
           <h3>Bedcover & Selimut</h3>
-          <p>Bersih mendalam, cepat kering.</p>
-          <div class="price">Rp 35.000 – 65.000<small>/pcs</small></div>
+          <p>Bersih sampai dalam. Cepat kering.</p>
+          <div class="price"><small class="from">Mulai dari</small>Rp 35.000<small>/pcs</small></div>
           <a class="btn btn-ghost btn-sm" data-wa data-wa-msg="Halo, saya mau tanya cuci bedcover." href="https://wa.me/6281297399978">Tanya harga</a>
         </article>
         <article class="card service">
+          <div class="smedia"><figure class="media media-card" data-label="Foto · karpet dan gorden"><img src="assets/photos/layanan-karpet.jpg" alt="Karpet dan gorden" width="640" height="360" loading="lazy" onerror="this.parentElement.classList.add('missing');this.remove()"></figure></div>
           <h3>Karpet & Gorden</h3>
-          <p>Pembersihan profesional. Harga sesuai ukuran.</p>
-          <div class="price">Mulai Rp 20.000<small>/m²</small></div>
+          <p>Harga sesuai ukuran.</p>
+          <div class="price"><small class="from">Mulai dari</small>Rp 40.000<small>/m²</small></div>
           <a class="btn btn-ghost btn-sm" data-wa data-wa-msg="Halo, saya mau tanya cuci karpet/gorden. Ukurannya:" href="https://wa.me/6281297399978">Tanya harga</a>
         </article>
         <article class="card service">
+          <div class="smedia"><figure class="media media-card" data-label="Foto · hilangkan noda"><img src="assets/photos/layanan-noda.jpg" alt="Hilangkan noda" width="640" height="360" loading="lazy" onerror="this.parentElement.classList.add('missing');this.remove()"></figure></div>
           <h3>Hilangkan Noda</h3>
-          <p>Tinta, karat, luntur warna.</p>
+          <p>Tinta, karat, luntur.</p>
           <div class="price price-quote">Cek noda gratis lewat foto</div>
           <a class="btn btn-ghost btn-sm" data-wa data-wa-msg="Halo, saya mau cek noda di pakaian. Ini fotonya:" href="https://wa.me/6281297399978">Kirim foto</a>
         </article>
       </div>
 
-      <h3 class="subhead">Paket hemat</h3>
-      <div class="grid g4 reveal">
+      <h3 class="subhead">Daftar Harga Lengkap <small class="asof">per <span class="price-year">2026</span></small></h3>
+      <div class="tabs" role="tablist" aria-label="Kategori harga">
+        <button class="tab" type="button" role="tab" id="tab-kiloan" aria-controls="panel-kiloan" aria-selected="true" tabindex="0">Kiloan</button>
+        <button class="tab" type="button" role="tab" id="tab-satuan" aria-controls="panel-satuan" aria-selected="false" tabindex="-1">Satuan</button>
+        <button class="tab" type="button" role="tab" id="tab-dryclean" aria-controls="panel-dryclean" aria-selected="false" tabindex="-1">Dry Clean</button>
+        <button class="tab" type="button" role="tab" id="tab-rumah" aria-controls="panel-rumah" aria-selected="false" tabindex="-1">Rumah</button>
+        <button class="tab" type="button" role="tab" id="tab-sepatutas" aria-controls="panel-sepatutas" aria-selected="false" tabindex="-1">Sepatu & Tas</button>
+        <button class="tab" type="button" role="tab" id="tab-bayi" aria-controls="panel-bayi" aria-selected="false" tabindex="-1">Bayi</button>
+      </div>
+      <div class="panel" role="tabpanel" id="panel-kiloan" aria-labelledby="tab-kiloan">
+          <h4 class="pgroup">Reguler</h4>
+          <ul class="plist">
+            <li><span class="pname">Cuci setrika lipat<small class="pnote">Min. 5 kg · 2–3 hari</small></span><span class="pprice"><small>Mulai dari</small> Rp 20.000<small>/kg</small></span></li>
+            <li><span class="pname">Cuci lipat saja (tanpa setrika)<small class="pnote">Min. 5 kg · 2–3 hari</small></span><span class="pprice"><small>Mulai dari</small> Rp 15.000<small>/kg</small></span></li>
+            <li><span class="pname">Cuci setrika bayi<small class="pnote">Min. 3 kg · deterjen lembut untuk bayi</small></span><span class="pprice"><small>Mulai dari</small> Rp 22.000<small>/kg</small></span></li>
+            <li><span class="pname">Setrika saja<small class="pnote">Min. 3 kg</small></span><span class="pprice"><small>Mulai dari</small> Rp 16.000<small>/kg</small></span></li>
+          </ul>
+          <h4 class="pgroup">Express</h4>
+          <ul class="plist">
+            <li><span class="pname">Cuci setrika lipat express<small class="pnote">Min. 3 kg · selesai 12–24 jam</small></span><span class="pprice"><small>Mulai dari</small> Rp 28.000<small>/kg</small></span></li>
+          </ul>
+        <p class="note">Kiloan ditimbang saat dijemput.</p>
+        <a class="btn btn-wa btn-sm" data-wa data-wa-msg="Halo, saya mau tanya laundry kiloan." href="https://wa.me/6281297399978">Tanya kiloan</a>
+      </div>
+
+      <div class="panel" role="tabpanel" id="panel-satuan" aria-labelledby="tab-satuan" hidden>
+          <h4 class="pgroup">Atasan</h4>
+          <ul class="plist">
+            <li><span class="pname">Kemeja panjang, pendek, batik<small class="pnote">Termasuk hanger</small></span><span class="pprice"><small>Mulai dari</small> Rp 40.000<small>/pcs</small></span></li>
+            <li><span class="pname">Kaos, T-shirt, baju olahraga</span><span class="pprice"><small>Mulai dari</small> Rp 40.000<small>/pcs</small></span></li>
+            <li><span class="pname">Blus, dress casual</span><span class="pprice"><small>Mulai dari</small> Rp 45.000<small>/pcs</small></span></li>
+            <li><span class="pname">Cardigan<small class="pnote">Dicuci hati-hati agar tidak melar</small></span><span class="pprice"><small>Mulai dari</small> Rp 40.000<small>/pcs</small></span></li>
+            <li><span class="pname">Jaket tipis (parasut, jeans, kain)</span><span class="pprice"><small>Mulai dari</small> Rp 50.000<small>/pcs</small></span></li>
+            <li><span class="pname">Jaket tebal, blazer, coat<small class="pnote">Cuci uap, bukan dry clean</small></span><span class="pprice"><small>Mulai dari</small> Rp 55.000<small>/pcs</small></span></li>
+          </ul>
+          <h4 class="pgroup">Bawahan</h4>
+          <ul class="plist">
+            <li><span class="pname">Celana panjang bahan<small class="pnote">Lipatan dipress rapi</small></span><span class="pprice"><small>Mulai dari</small> Rp 40.000<small>/pcs</small></span></li>
+            <li><span class="pname">Jeans<small class="pnote">Dicuci terpisah</small></span><span class="pprice"><small>Mulai dari</small> Rp 50.000<small>/pcs</small></span></li>
+            <li><span class="pname">Celana pendek</span><span class="pprice"><small>Mulai dari</small> Rp 40.000<small>/pcs</small></span></li>
+            <li><span class="pname">Rok panjang</span><span class="pprice"><small>Mulai dari</small> Rp 40.000<small>/pcs</small></span></li>
+            <li><span class="pname">Rok pendek</span><span class="pprice"><small>Mulai dari</small> Rp 40.000<small>/pcs</small></span></li>
+            <li><span class="pname">Legging</span><span class="pprice"><small>Mulai dari</small> Rp 30.000<small>/pcs</small></span></li>
+          </ul>
+          <h4 class="pgroup">Muslim</h4>
+          <ul class="plist">
+            <li><span class="pname">Baju koko, pakaian muslim</span><span class="pprice"><small>Mulai dari</small> Rp 35.000<small>/pcs</small></span></li>
+            <li><span class="pname">Gaun, gamis</span><span class="pprice"><small>Mulai dari</small> Rp 55.000<small>/pcs</small></span></li>
+            <li><span class="pname">Mukena (1 stel lengkap)<small class="pnote">Dicuci terpisah, dikemas khusus</small></span><span class="pprice"><small>Mulai dari</small> Rp 40.000<small>/stel</small></span></li>
+            <li><span class="pname">Hijab premium (voal, pashmina, silk)<small class="pnote">Dicuci lembut</small></span><span class="pprice"><small>Mulai dari</small> Rp 15.000<small>/pcs</small></span></li>
+          </ul>
+          <h4 class="pgroup">Lainnya</h4>
+          <ul class="plist">
+            <li><span class="pname">Piyama, daster, baju tidur</span><span class="pprice"><small>Mulai dari</small> Rp 35.000<small>/pcs</small></span></li>
+            <li><span class="pname">Pakaian dalam, kaos kaki, sarung tangan</span><span class="pprice"><small>Mulai dari</small> Rp 10.000<small>/3 pcs</small></span></li>
+          </ul>
+        <p class="note">Cuci dan setrika per potong. Dry clean ada di tab Dry Clean.</p>
+        <a class="btn btn-wa btn-sm" data-wa data-wa-msg="Halo, saya mau tanya laundry satuan." href="https://wa.me/6281297399978">Tanya satuan</a>
+      </div>
+
+      <div class="panel" role="tabpanel" id="panel-dryclean" aria-labelledby="tab-dryclean" hidden>
+          <h4 class="pgroup">Dry clean</h4>
+          <ul class="plist">
+            <li><span class="pname">Jas / suit (1 stel)</span><span class="pprice"><small>Mulai dari</small> Rp 115.000<small>/stel</small></span></li>
+            <li><span class="pname">Blazer atau jas atasan saja</span><span class="pprice"><small>Mulai dari</small> Rp 70.000<small>/pcs</small></span></li>
+            <li><span class="pname">Celana atau rok</span><span class="pprice"><small>Mulai dari</small> Rp 45.000<small>/pcs</small></span></li>
+            <li><span class="pname">Gaun pesta, kebaya<small class="pnote">Dirawat hati-hati</small></span><span class="pprice"><small>Mulai dari</small> Rp 86.000<small>/pcs</small></span></li>
+            <li><span class="pname">Coat, mantel</span><span class="pprice"><small>Mulai dari</small> Rp 120.000<small>/pcs</small></span></li>
+          </ul>
+        <p class="note">Harga tergantung bahan. Kirim foto kalau ragu.</p>
+        <a class="btn btn-wa btn-sm" data-wa data-wa-msg="Halo, saya mau tanya dry clean." href="https://wa.me/6281297399978">Tanya dry clean</a>
+      </div>
+
+      <div class="panel" role="tabpanel" id="panel-rumah" aria-labelledby="tab-rumah" hidden>
+          <h4 class="pgroup">Tempat tidur</h4>
+          <ul class="plist">
+            <li><span class="pname">Bed cover single (di bawah 160 cm)</span><span class="pprice"><small>Mulai dari</small> Rp 52.000<small>/pcs</small></span></li>
+            <li><span class="pname">Bed cover queen (160–180 cm)</span><span class="pprice"><small>Mulai dari</small> Rp 69.000<small>/pcs</small></span></li>
+            <li><span class="pname">Bed cover king / extra king<small class="pnote">Ukuran besar</small></span><span class="pprice"><small>Mulai dari</small> Rp 86.000<small>/pcs</small></span></li>
+            <li><span class="pname">Sprei satuan</span><span class="pprice"><small>Mulai dari</small> Rp 40.000<small>/pcs</small></span></li>
+            <li><span class="pname">Sprei set<small class="pnote">Sprei + 2 sarung bantal + 2 sarung guling</small></span><span class="pprice"><small>Mulai dari</small> Rp 52.000<small>/set</small></span></li>
+            <li><span class="pname">Quilt cover</span><span class="pprice"><small>Mulai dari</small> Rp 52.000<small>/pcs</small></span></li>
+            <li><span class="pname">Sarung bantal atau guling</span><span class="pprice"><small>Mulai dari</small> Rp 35.000<small>/pcs</small></span></li>
+            <li><span class="pname">Selimut</span><span class="pprice"><small>Mulai dari</small> Rp 35.000<small>/pcs</small></span></li>
+          </ul>
+          <h4 class="pgroup">Kamar mandi</h4>
+          <ul class="plist">
+            <li><span class="pname">Handuk besar, bathrobe</span><span class="pprice"><small>Mulai dari</small> Rp 35.000<small>/pcs</small></span></li>
+          </ul>
+          <h4 class="pgroup">Ibadah</h4>
+          <ul class="plist">
+            <li><span class="pname">Sajadah kecil</span><span class="pprice"><small>Mulai dari</small> Rp 30.000<small>/pcs</small></span></li>
+            <li><span class="pname">Sajadah besar</span><span class="pprice"><small>Mulai dari</small> Rp 40.000<small>/pcs</small></span></li>
+          </ul>
+          <h4 class="pgroup">Gorden & karpet</h4>
+          <ul class="plist">
+            <li><span class="pname">Vitrase, gorden<small class="pnote">Per meter persegi</small></span><span class="pprice"><small>Mulai dari</small> Rp 40.000<small>/m²</small></span></li>
+            <li><span class="pname">Karpet<small class="pnote">Per meter persegi</small></span><span class="pprice"><small>Mulai dari</small> Rp 40.000<small>/m²</small></span></li>
+          </ul>
+        <p class="note">Bedcover dan selimut bisa butuh waktu lebih lama dari estimasi. Kami kabari saat pesan.</p>
+        <a class="btn btn-wa btn-sm" data-wa data-wa-msg="Halo, saya mau tanya cuci perlengkapan rumah." href="https://wa.me/6281297399978">Tanya harga</a>
+      </div>
+
+      <div class="panel" role="tabpanel" id="panel-sepatutas" aria-labelledby="tab-sepatutas" hidden>
+          <h4 class="pgroup">Sepatu</h4>
+          <ul class="plist">
+            <li><span class="pname">Sneakers, sepatu canvas<small class="pnote">Dibersihkan luar dan dalam</small></span><span class="pprice"><small>Mulai dari</small> Rp 85.000<small>/pasang</small></span></li>
+            <li><span class="pname">Sepatu kulit, formal, boots<small class="pnote">Perawatan khusus kulit</small></span><span class="pprice"><small>Mulai dari</small> Rp 120.000<small>/pasang</small></span></li>
+          </ul>
+          <h4 class="pgroup">Tas</h4>
+          <ul class="plist">
+            <li><span class="pname">Tas ransel<small class="pnote">Termasuk bagian dalam</small></span><span class="pprice"><small>Mulai dari</small> Rp 115.000<small>/pcs</small></span></li>
+            <li><span class="pname">Tas tangan (ukuran medium)</span><span class="pprice"><small>Mulai dari</small> Rp 290.000<small>/pcs</small></span></li>
+            <li><span class="pname">Koper<small class="pnote">Harga sesuai ukuran</small></span><span class="pprice"><small>Mulai dari</small> Rp 115.000<small>/pcs</small></span></li>
+          </ul>
+          <h4 class="pgroup">Barang spesial</h4>
+          <ul class="plist">
+            <li><span class="pname">Boneka (kecil, sedang, besar)<small class="pnote">Harga sesuai ukuran</small></span><span class="pprice"><small>Mulai dari</small> Rp 35.000<small>/pcs</small></span></li>
+            <li><span class="pname">Helm (half face, full face)<small class="pnote">Busa dalam dibersihkan</small></span><span class="pprice"><small>Mulai dari</small> Rp 30.000<small>/pcs</small></span></li>
+          </ul>
+        <p class="note">Kirim foto dulu. Harga pasti kami kabari lewat WhatsApp.</p>
+        <a class="btn btn-wa btn-sm" data-wa data-wa-msg="Halo, saya mau cuci sepatu/tas. Ini fotonya:" href="https://wa.me/6281297399978">Kirim foto</a>
+      </div>
+
+      <div class="panel" role="tabpanel" id="panel-bayi" aria-labelledby="tab-bayi" hidden>
+          <h4 class="pgroup">Pakaian</h4>
+          <ul class="plist">
+            <li><span class="pname">Pakaian bayi dan anak (0–5 tahun)<small class="pnote">Dicuci terpisah dari pakaian dewasa. Harga sesuai ukuran.</small></span><span class="pprice"><small>Mulai dari</small> Rp 23.000<small>/pcs</small></span></li>
+            <li><span class="pname">Sepatu bayi</span><span class="pprice"><small>Mulai dari</small> Rp 58.000<small>/pasang</small></span></li>
+          </ul>
+          <h4 class="pgroup">Perlengkapan</h4>
+          <ul class="plist">
+            <li><span class="pname">Stroller (small, medium, large)</span><span class="pprice"><small>Mulai dari</small> Rp 350.000<small>/unit</small></span></li>
+            <li><span class="pname">Twin stroller</span><span class="pprice"><small>Mulai dari</small> Rp 460.000<small>/unit</small></span></li>
+            <li><span class="pname">Car seat, bouncer, high chair</span><span class="pprice"><small>Mulai dari</small> Rp 400.000<small>/unit</small></span></li>
+            <li><span class="pname">Playard, baby box, bumper</span><span class="pprice"><small>Mulai dari</small> Rp 460.000<small>/unit</small></span></li>
+            <li><span class="pname">Kasur bayi, perlak</span><span class="pprice"><small>Mulai dari</small> Rp 400.000<small>/unit</small></span></li>
+            <li><span class="pname">Baby carrier, baby gym, alas main</span><span class="pprice"><small>Mulai dari</small> Rp 200.000<small>/unit</small></span></li>
+            <li><span class="pname">Bantal menyusui</span><span class="pprice"><small>Mulai dari</small> Rp 86.000<small>/unit</small></span></li>
+            <li><span class="pname">Tas popok</span><span class="pprice"><small>Mulai dari</small> Rp 175.000<small>/unit</small></span></li>
+            <li><span class="pname">Liner stroller</span><span class="pprice"><small>Mulai dari</small> Rp 115.000<small>/unit</small></span></li>
+            <li><span class="pname">Selimut bayi</span><span class="pprice"><small>Mulai dari</small> Rp 115.000<small>/pcs</small></span></li>
+            <li><span class="pname">Bantal bayi, tas kecil</span><span class="pprice"><small>Mulai dari</small> Rp 58.000<small>/pcs</small></span></li>
+          </ul>
+        <p class="note">Kirim foto dulu. Harga pasti dan waktu pengerjaan kami kabari lewat WhatsApp.</p>
+        <a class="btn btn-wa btn-sm" data-wa data-wa-msg="Halo, saya mau cuci perlengkapan bayi. Ini fotonya:" href="https://wa.me/6281297399978">Kirim foto</a>
+      </div>
+      <aside class="disclaimer" role="note">
+        <strong>Catatan soal harga</strong>
+        <p>Harga di halaman ini adalah harga mulai dari, per <span class="price-year">2026</span>. Harga bisa berubah sewaktu-waktu, misalnya karena biaya bahan naik, jenis kain, atau kondisi cucian. Harga pasti kami kabari lewat WhatsApp sebelum cucian dicuci. Kalau harganya belum cocok, tidak apa-apa. Cucian tidak kami proses.</p>
+      </aside>
+
+      <h3 class="subhead">Paket Anti Ribet</h3>
+      <p class="subhead-note">Cuci rutin, harga lebih hemat, nol mikir.</p>
+      <div class="grid g2 reveal">
         <article class="card service">
+          <div class="smedia"><figure class="media media-card" data-label="Foto · paket mingguan"><img src="assets/photos/paket-mingguan.jpg" alt="Paket mingguan" width="640" height="360" loading="lazy" onerror="this.parentElement.classList.add('missing');this.remove()"></figure><span class="badge">Lebih hemat</span></div>
           <h3>Paket Mingguan</h3>
-          <p>10 kg per minggu, jemput dan antar terjadwal.</p>
-          <div class="price">Mulai Rp 140.000</div>
-          <a class="btn btn-ghost btn-sm" data-wa data-wa-msg="Halo, saya tertarik paket mingguan." href="https://wa.me/6281297399978">Tanya paket</a>
+          <p>10 kg tiap minggu. Jemput dan antar terjadwal.</p>
+          <div class="price"><small class="from">Mulai dari</small>Rp 170.000<small>/minggu</small></div>
+          <a class="btn btn-wa btn-sm" data-wa data-wa-msg="Halo, saya tertarik Paket Mingguan." href="https://wa.me/6281297399978">Ambil paket</a>
         </article>
         <article class="card service">
+          <div class="smedia"><figure class="media media-card" data-label="Foto · langganan bulanan"><img src="assets/photos/paket-bulanan.jpg" alt="Langganan bulanan" width="640" height="360" loading="lazy" onerror="this.parentElement.classList.add('missing');this.remove()"></figure><span class="badge">Paling hemat</span></div>
           <h3>Langganan Bulanan</h3>
-          <p>Cuci rutin tanpa repot, harga lebih hemat.</p>
-          <div class="price price-quote">Harga khusus langganan</div>
-          <a class="btn btn-ghost btn-sm" data-wa data-wa-msg="Halo, saya tertarik langganan bulanan." href="https://wa.me/6281297399978">Tanya penawaran</a>
-        </article>
-        <article class="card service">
-          <h3>Kantor, Kos & Hotel</h3>
-          <p>Volume besar dan jadwal rutin.</p>
-          <div class="price price-quote">Penawaran khusus</div>
-          <a class="btn btn-ghost btn-sm" data-wa data-wa-msg="Halo, saya butuh laundry untuk kantor/kos/hotel." href="https://wa.me/6281297399978">Minta penawaran</a>
+          <p>40 kg tiap bulan. Cuci rutin, tanpa mikir.</p>
+          <div class="price"><small class="from">Mulai dari</small>Rp 640.000<small>/bulan</small></div>
+          <a class="btn btn-wa btn-sm" data-wa data-wa-msg="Halo, saya tertarik Langganan Bulanan." href="https://wa.me/6281297399978">Ambil langganan</a>
         </article>
       </div>
 
+      <article class="card biz reveal">
+        <div class="biz-media"><figure class="media media-card" data-label="Foto · laundry untuk bisnis"><img src="assets/photos/paket-bisnis.jpg" alt="Laundry untuk gym, padel, hotel, kos, dan kantor" width="640" height="360" loading="lazy" onerror="this.parentElement.classList.add('missing');this.remove()"></figure></div>
+        <div>
+          <span class="badge">Untuk bisnis</span>
+          <h3>Gym, Padel, Hotel, Kos & Kantor</h3>
+          <p>Handuk, seprai, seragam, dan cucian rutin lainnya. Jemput terjadwal, harga khusus untuk volume besar.</p>
+          <ul class="chips" aria-label="Cocok untuk">
+            <li>Gym</li><li>Padel</li><li>Hotel</li><li>Kos</li><li>Kantor</li>
+          </ul>
+        </div>
+        <div class="biz-cta">
+          <div class="price"><small class="from">Mulai dari</small>Rp 15.000<small>/kg</small></div>
+          <a class="btn btn-wa" data-wa data-wa-msg="Halo, saya dari (nama usaha) dan butuh laundry rutin. Perkiraan jumlah per minggu:" href="https://wa.me/6281297399978">Minta penawaran bisnis</a>
+        </div>
+      </article>
+
       <div class="estimator card" id="estimator">
-        <h3>Hitung Perkiraan Biaya</h3>
+        <h3>Hitung Perkiraan</h3>
         <div class="est-row">
           <label>Layanan
             <select id="estService">
-              <option value="Kiloan Reguler" data-unit="kg" data-min="15000" data-max="18000">Kiloan Reguler (per kg)</option>
-              <option value="Express" data-unit="kg" data-min="25000" data-max="35000">Express (per kg)</option>
-              <option value="Dry Clean" data-unit="pcs" data-min="35000" data-max="75000">Dry Clean (per pcs)</option>
-              <option value="Cuci Sepatu" data-unit="pasang" data-min="60000" data-max="120000">Cuci Sepatu (per pasang)</option>
-              <option value="Cuci Tas" data-unit="pcs" data-min="75000" data-max="150000">Cuci Tas (per pcs)</option>
-              <option value="Bedcover & Selimut" data-unit="pcs" data-min="35000" data-max="65000">Bedcover & Selimut (per pcs)</option>
-              <option value="Karpet & Gorden" data-unit="m²" data-min="20000" data-max="35000">Karpet & Gorden (per m²)</option>
+              <option value="Kiloan Reguler" data-unit="kg" data-min="20000">Kiloan Reguler (per kg)</option>
+              <option value="Express" data-unit="kg" data-min="28000">Express (per kg)</option>
+              <option value="Dry Clean" data-unit="pcs" data-min="45000">Dry Clean (per pcs)</option>
+              <option value="Cuci Sepatu" data-unit="pasang" data-min="85000">Cuci Sepatu (per pasang)</option>
+              <option value="Cuci Tas" data-unit="pcs" data-min="115000">Cuci Tas (per pcs)</option>
+              <option value="Bedcover & Selimut" data-unit="pcs" data-min="35000">Bedcover & Selimut (per pcs)</option>
+              <option value="Karpet & Gorden" data-unit="m²" data-min="40000">Karpet & Gorden (per m²)</option>
             </select>
           </label>
           <label><span id="estQtyLabel">Berat (kg)</span>
             <input id="estKg" type="number" min="1" step="0.5" value="5" inputmode="decimal">
           </label>
-          <div class="est-out">Perkiraan <strong id="estTotal">Rp 0</strong></div>
+          <div class="est-out">Mulai dari <strong id="estTotal">Rp 0</strong></div>
         </div>
-        <p class="note">Perkiraan saja. Jumlah dan harga final dikonfirmasi sebelum cucian diproses.</p>
-        <a class="btn btn-wa" id="estWa" href="https://wa.me/6281297399978">Konfirmasi harga via WhatsApp</a>
+        <p class="note">Ini perkiraan awal. Harga pasti tergantung bahan dan kondisi, dan kami kabari dulu sebelum dicuci.</p>
+        <a class="btn btn-wa" id="estWa" href="https://wa.me/6281297399978">Tanya harga pasti</a>
       </div>
     </div>
   </section>
 
 <section id="proses" class="section">
     <div class="wrap">
-      <h2>Standar Proses Pencucian Millie's</h2>
-      <p class="sub">Bersih, rapi, dan terawat. Setiap tahap dikerjakan teliti tanpa ada yang terlewat.</p>
+      <h2>Cara Kami Mencuci</h2>
+      <p class="sub">Enam langkah. Tidak ada yang dilewati.</p>
       <ol class="steps reveal">
-        <li><b>1</b><h3>Penjemputan</h3><p>Kurir kami menjemput ke lokasi Anda sesuai jadwal yang disepakati.</p></li>
-        <li><b>2</b><h3>Pemeriksaan & Sortir</h3><p>Pengecekan detail kondisi, noda khusus, dan instruksi label bahan.</p></li>
-        <li><b>3</b><h3>Pembersihan Higienis</h3><p>Pencucian menggunakan metode dan formula khusus sesuai jenis kain.</p></li>
-        <li><b>4</b><h3>Pengeringan Terkontrol</h3><p>Proses pengeringan aman yang menjaga serat kain tetap awet.</p></li>
-        <li><b>5</b><h3>Penyetrikaan & QC</h3><p>Disetrika rapi dengan teliti, lalu melalui tahap pengecekan kualitas akhir.</p></li>
-        <li><b>6</b><h3>Pengantaran</h3><p>Dikemas rapi dan diantar kembali sesuai jadwal yang disepakati.</p></li>
+        <li><b>1</b><h3>Jemput</h3><p>Kurir datang sesuai jadwal.</p></li>
+        <li><b>2</b><h3>Periksa</h3><p>Cek noda, kondisi, dan label.</p></li>
+        <li><b>3</b><h3>Cuci</h3><p>Cara sesuai jenis kain.</p></li>
+        <li><b>4</b><h3>Keringkan</h3><p>Aman untuk serat kain.</p></li>
+        <li><b>5</b><h3>Setrika & Cek</h3><p>Rapi, lalu dicek lagi.</p></li>
+        <li><b>6</b><h3>Antar</h3><p>Dikemas rapi, diantar sesuai jadwal.</p></li>
       </ol>
     </div>
   </section>
@@ -226,8 +402,8 @@
   <section id="testimoni" class="section alt">
     <div class="wrap narrow">
       <h2>Ulasan pelanggan</h2>
-      <p class="sub">Sudah mencoba layanan kami? Ceritakan pengalaman Anda di Google. Masukan Anda sangat berarti.</p>
-      <p><a class="btn btn-wa" href="https://g.page/r/CTvx7pUuik6VEBM/review">Tulis ulasan di Google</a></p>
+      <p class="sub">Sudah coba Millie's? Ceritakan di Google.</p>
+      <p><a class="btn btn-wa" href="https://g.page/r/CTvx7pUuik6VEBM/review">Tulis ulasan</a></p>
     </div>
   </section>
 
@@ -255,42 +431,52 @@
 
   <section id="faq" class="section alt">
     <div class="wrap narrow">
-      <h2>Pertanyaan Umum (FAQ)</h2>
+      <h2>Pertanyaan Umum</h2>
       <div class="faq">
 
         <details>
-          <summary>Bagaimana jika ada uang atau barang berharga tertinggal di saku?</summary>
-          <p>Mohon kosongkan seluruh saku sebelum penjemputan. Barang yang kami temukan akan kami simpan dan kembalikan kepada Anda. Kami tidak dapat bertanggung jawab atas kerusakan atau kehilangan uang, kartu, perhiasan, atau gawai yang tertinggal di dalam saku.</p>
+          <summary>Ada uang atau barang di saku, bagaimana?</summary>
+          <p>Mohon kosongkan saku sebelum dijemput. Barang yang kami temukan kami simpan dan kembalikan. Uang, kartu, perhiasan, dan gawai yang tertinggal bukan tanggung jawab kami.</p>
         </details>
 
         <details>
-          <summary>Bagaimana jika hasil kurang memuaskan, atau pakaian luntur atau rusak?</summary>
-          <p>Kami mencuci sesuai petunjuk label perawatan. Jika ada keluhan, kirim foto atau video lewat WhatsApp maksimal 24 jam setelah cucian diterima. Kami akan memeriksanya, dan jika memang perlu, melakukan cuci ulang tanpa biaya (1 kali per item). Jika kerusakan terbukti akibat kelalaian kami, kami bertanggung jawab dengan penggantian yang wajar, maksimal 5 (lima) kali biaya cuci item tersebut. Kerusakan akibat kondisi bahan, luntur bawaan, atau noda lama yang sudah kami informasikan di awal tidak termasuk.</p>
+          <summary>Hasil kurang bagus, luntur, atau rusak?</summary>
+          <p>Kami cuci sesuai label perawatan. Ada keluhan? Kirim foto atau video lewat WhatsApp maksimal 24 jam setelah cucian diterima. Kami cek, lalu cuci ulang gratis jika perlu (1× per item). Jika kerusakan terbukti karena kelalaian kami, kami ganti dengan wajar, maksimal 5× biaya cuci item itu. Kerusakan karena kondisi bahan, luntur bawaan, atau noda lama yang sudah kami kabarkan tidak termasuk.</p>
         </details>
 
         <details>
-          <summary>Berapa lama estimasi pengerjaan?</summary>
-          <p>Layanan reguler membutuhkan 2 hingga 3 hari kerja. Layanan express selesai dalam 12–24 jam dengan tarif khusus. Estimasi pasti kami konfirmasi saat pemesanan, dan kami kabari lebih awal jika ada perubahan.</p>
+          <summary>Berapa lama selesainya?</summary>
+          <p>Reguler 2–3 hari kerja. Express 12–24 jam (tarif khusus). Bedcover, selimut, dan perlengkapan bayi bisa lebih lama. Estimasi pasti kami kabari saat pesan.</p>
         </details>
 
         <details>
-          <summary>Area mana saja yang dilayani antar-jemput?</summary>
-          <p>Antar-jemput tersedia di Permata Hijau, Kebayoran Lama, sekitar GBK, dan area sekitarnya (radius sekitar 5 km). Gratis untuk order minimal Rp 100.000. Di bawah itu, ongkos kurir kami konfirmasi lebih dulu. Untuk lokasi di luar radius, silakan tanya lewat WhatsApp.</p>
+          <summary>Antar-jemput sampai mana?</summary>
+          <p>Permata Hijau, Kebayoran Lama, sekitar GBK, dan sekitarnya (radius ±5 km). Gratis untuk order min. Rp 100.000. Di bawah itu ada ongkos kurir, kami kabari dulu. Di luar radius? Tanya lewat WhatsApp.</p>
         </details>
 
         <details>
-          <summary>Bagaimana jika saya tidak bisa menerima atau menyerahkan cucian sesuai jadwal?</summary>
-          <p>Jadwal dikonfirmasi lewat WhatsApp. Jika perlu mengubah jadwal, beri tahu kami minimal 2 jam sebelumnya. Pengantaran ulang karena penerima tidak di tempat tanpa kabar dapat dikenakan ongkos kurir tambahan.</p>
+          <summary>Bisa cuci stroller atau perlengkapan bayi?</summary>
+          <p>Bisa. Kirim foto lewat WhatsApp. Kami kabari harga dan waktu pengerjaannya.</p>
         </details>
 
         <details>
-          <summary>Bagaimana jika cucian tidak diambil setelah selesai?</summary>
-          <p>Kami akan menghubungi Anda lewat WhatsApp. Cucian yang belum diambil lebih dari 30 hari setelah selesai tidak lagi dapat kami jamin penyimpanannya.</p>
+          <summary>Bisa untuk gym, padel, hotel, atau kos?</summary>
+          <p>Bisa. Kami jemput rutin dengan harga khusus untuk volume besar. Chat kami lewat WhatsApp untuk penawaran.</p>
         </details>
 
         <details>
-          <summary>Metode pembayaran apa saja yang tersedia?</summary>
-          <p>Kami menerima pembayaran tunai, transfer bank, dan QRIS.</p>
+          <summary>Tidak bisa terima atau serahkan cucian sesuai jadwal?</summary>
+          <p>Kabari kami minimal 2 jam sebelumnya. Kalau tidak ada kabar dan tidak ada orang, pengantaran ulang bisa kena ongkos kurir.</p>
+        </details>
+
+        <details>
+          <summary>Cucian tidak diambil-ambil?</summary>
+          <p>Kami hubungi lewat WhatsApp. Cucian yang tidak diambil lebih dari 30 hari tidak lagi kami jamin penyimpanannya.</p>
+        </details>
+
+        <details>
+          <summary>Bayar pakai apa?</summary>
+          <p>Tunai, transfer bank, atau QRIS.</p>
         </details>
 
       </div>
@@ -300,8 +486,8 @@
   <section id="lacak" class="section">
     <div class="wrap narrow">
       <div class="card track">
-        <h2>Lacak pesanan Anda</h2>
-        <p class="sub">Masukkan nomor nota, kami cek statusnya lewat WhatsApp.</p>
+        <h2>Cek Status Cucian</h2>
+        <p class="sub">Masukkan nomor nota. Kami cek lewat WhatsApp.</p>
         <form id="trackForm" class="track-form">
           <input id="trackInput" type="text" placeholder="Nomor nota, mis. INV-0123" required aria-label="Nomor nota">
           <button class="btn btn-wa" type="submit">Cek Status</button>
@@ -313,7 +499,7 @@
   <section id="lokasi" class="section alt">
     <div class="wrap">
       <h2>Lokasi & Jam Buka</h2>
-      <p class="sub">Mampir langsung atau pesan antar-jemput.</p>
+      <p class="sub">Mampir, atau pesan antar-jemput.</p>
       <div class="loc-grid">
         <div class="card">
           <h3>Millie's Laundry</h3>
@@ -335,8 +521,8 @@
 
   <section class="banner">
     <div class="wrap">
-      <h2>Lebih banyak waktu untuk yang Anda sayangi.</h2>
-      <p>Serahkan urusan cucian pada ahlinya. Anda tinggal duduk santai.</p>
+      <h2>Lebih banyak waktu untuk orang tersayang.</h2>
+      <p>Urusan cucian? Serahkan ke kami.</p>
       <a class="btn btn-light" data-wa href="https://wa.me/6281297399978">Laundry Sekarang</a>
     </div>
   </section>

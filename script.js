@@ -2,7 +2,8 @@
 const CONFIG = {
   whatsapp: "6281297399978",           // country code + number, no "+" or spaces
   businessName: "Millie's Laundry",
-  greeting: "Halo, saya mau laundry."
+  greeting: "Halo, saya mau laundry.",
+  priceYear: 2026                      // the year shown as "Harga per ..." (change this one number each year)
 };
 
 // ===== WhatsApp links =====
@@ -49,14 +50,13 @@ function updateEstimate() {
   const opt = estService.options[estService.selectedIndex];
   const unit = opt.dataset.unit || "kg";
   const min = parseFloat(opt.dataset.min) || 0;
-  const max = parseFloat(opt.dataset.max) || min;
   const qty = parseFloat(estKg.value) || 0;
   const round = function (n) { return Math.round(n / 500) * 500; };       // nearest Rp 500
   const fmt = function (n) { return n.toLocaleString("id-ID"); };
-  const lo = round(min * qty), hi = round(max * qty);
-  estTotal.textContent = lo === hi ? "Rp " + fmt(lo) : "Rp " + fmt(lo) + " – " + fmt(hi);
+  const lo = round(min * qty);
+  estTotal.textContent = "Rp " + fmt(lo);
   if (estWa) {   // opens WhatsApp with the customer's choice already typed in
-    const msg = "Halo, saya mau " + opt.value + " sekitar " + qty + " " + unit + " (perkiraan " + estTotal.textContent + "). Bisa dibantu?";
+    const msg = "Halo, saya mau " + opt.value + " sekitar " + qty + " " + unit + " (mulai dari " + estTotal.textContent + "). Bisa dibantu?";
     estWa.href = waBase + "?text=" + encodeURIComponent(msg + " (" + CONFIG.businessName + ")");
   }
 }
@@ -142,28 +142,32 @@ document.querySelectorAll("a[href^='http']").forEach(function (a) {
     return el;
   }
 
-  // Full-screen bubbles rise, the page changes at the midpoint (onMid), then everything clears. ~1.5s total.
+  // Wave 1: bubbles rise from the bottom, staggered so they don't move as one block.
+  // Wave 2: a trail of bubbles drifts in from the RIGHT edge (up and to the left).
+  // Wave 3: a few more follow from the LEFT edge (up and to the right).
+  // The page changes at the midpoint (onMid). About 2 seconds in total.
   function runTransition(onMid) {
     if (reduceMotion) { onMid(); return; }
     busy = true;
 
     const W = window.innerWidth, H = window.innerHeight;
-    const count = Math.round(Math.min(70, Math.max(26, W / 18)));
+    const count = Math.round(Math.min(50, Math.max(22, W / 22)));        // main wave
+    const rightCount = Math.min(14, Math.max(6, Math.round(count * 0.35)));
+    const leftCount = Math.min(6, Math.max(3, Math.round(rightCount * 0.45)));
     const maxSize = Math.min(200, W * 0.38);
     const made = [];
 
-    for (let i = 0; i < count; i++) {
-      const size = rand(40, maxSize);
+    function add(size) {
       const el = makeBubble(size);
-      el.style.left = rand(0, W) + "px";
-      made.push({ el: el, size: size });
+      el.style.left = "0px";                       // position is set with GSAP x / y below
+      made.push(el);
+      return el;
     }
 
     const tl = gsap.timeline({
       onComplete: function () {
-        made.forEach(function (b) { gsap.killTweensOf(b.el); b.el.remove(); });
-        gsap.set([wash, page], { clearProps: "opacity" });
-        busy = false;
+        made.forEach(function (el) { gsap.killTweensOf(el); el.remove(); });
+        if (!busy) gsap.set([wash, page], { clearProps: "opacity" });   // skip if a newer transition has started
       }
     });
 
@@ -171,13 +175,37 @@ document.querySelectorAll("a[href^='http']").forEach(function (a) {
     tl.to(wash, { opacity: 1, duration: 0.4, ease: "power1.in" }, 0.1);
     tl.to(page, { opacity: 0.25, duration: 0.35, ease: "power1.in" }, 0.1);
 
-    // each bubble rises from below the screen to above it, with a side-to-side wobble
-    made.forEach(function (b) {
-      const dur = 0.8 + (b.size / maxSize) * 0.3;      // bigger bubbles rise a bit slower
+    // wave 1: rise from the bottom, spread over about half a second, each a different speed
+    for (let i = 0; i < count; i++) {
+      const size = rand(40, maxSize);
+      const el = add(size);
+      const dur = rand(0.8, 1.3) + (size / maxSize) * 0.2;
       const sway = rand(10, 30);
-      tl.fromTo(b.el, { y: H + b.size }, { y: -b.size * 1.5, duration: dur, ease: "none" }, rand(0, 0.3));
-      gsap.fromTo(b.el, { x: -sway }, { x: sway, duration: rand(0.35, 0.6), yoyo: true, repeat: -1, ease: "sine.inOut" });
-    });
+      const x0 = rand(0, W);
+      gsap.set(el, { x: x0 });
+      tl.fromTo(el, { y: H + size }, { y: -size * 1.5, duration: dur, ease: "none" }, rand(0, 0.55));
+      gsap.fromTo(el, { xPercent: -sway }, { xPercent: sway, duration: rand(0.35, 0.6), yoyo: true, repeat: -1, ease: "sine.inOut" });
+    }
+
+    // trailing bubbles: they enter from a side, drift diagonally across, then fade out
+    function trail(n, fromRight, startMin, startMax, sizeMin, sizeMax) {
+      for (let i = 0; i < n; i++) {
+        const size = rand(sizeMin, sizeMax);
+        const el = add(size);
+        const start = rand(startMin, startMax);
+        const dur = rand(0.9, 1.3);
+        const x0 = fromRight ? W + size : -size;
+        const x1 = fromRight ? rand(-W * 0.05, W * 0.45) : rand(W * 0.55, W * 1.05);
+        const y0 = rand(H * 0.45, H * 0.95);
+        const y1 = rand(-size, H * 0.3);
+        gsap.set(el, { x: x0, y: y0 });
+        tl.to(el, { x: x1, y: y1, duration: dur, ease: "power1.inOut" }, start);
+        tl.to(el, { opacity: 0, duration: 0.3, ease: "power1.in" }, start + dur - 0.3);
+        gsap.fromTo(el, { yPercent: -12 }, { yPercent: 12, duration: rand(0.4, 0.7), yoyo: true, repeat: -1, ease: "sine.inOut" });
+      }
+    }
+    trail(rightCount, true, 0.45, 0.9, 30, Math.min(120, maxSize * 0.7));   // right side, after the main wave
+    trail(leftCount, false, 0.85, 1.15, 24, Math.min(90, maxSize * 0.5));   // a few from the left, last
 
     // screen is covered: swap the page now
     tl.call(onMid, null, 0.55);
@@ -185,6 +213,9 @@ document.querySelectorAll("a[href^='http']").forEach(function (a) {
     // reveal the new position
     tl.to(page, { opacity: 1, duration: 0.45, ease: "power1.out" }, 0.65);
     tl.to(wash, { opacity: 0, duration: 0.45, ease: "power1.out" }, 0.7);
+
+    // allow the next click again once the main wave is done (the trailing bubbles are harmless)
+    tl.call(function () { busy = false; }, null, 1.2);
   }
 
   // Small burst of bubbles where the visitor clicked (used for links that open in a new tab)
@@ -250,3 +281,135 @@ document.querySelectorAll("a[href^='http']").forEach(function (a) {
 // In the HTML write:  © <span id="year">2026</span> Millie's Laundry
 const yearEl = document.getElementById("year");
 if (yearEl) yearEl.textContent = new Date().getFullYear();
+// ===== Click sounds =====
+// Put your 3-4 sound files in assets/sounds/ and list them here (mp3, ogg or wav). Missing files are skipped quietly.
+// Menu links and in-page buttons (Layanan, Lihat Harga, the logo...) play this ONE fixed sound instead of a random one.
+const PAGE_SFX_FILE = "assets/sounds/page.mp3";
+const SFX_FILES = [
+  "assets/sounds/sfx1.mp3",
+  "assets/sounds/sfx2.mp3",
+  "assets/sounds/sfx3.mp3",
+  "assets/sounds/sfx4.mp3"
+];
+(function () {
+  const toggle = document.getElementById("soundToggle");
+  let on = true;
+  try { if (localStorage.getItem("sound") === "off") on = false; } catch (e) {}
+
+  const clips = SFX_FILES.map(function (src) {
+    const a = new Audio(src);
+    a.preload = "auto";
+    a.volume = 0.6;
+    return a;
+  });
+  const pageClip = new Audio(PAGE_SFX_FILE);
+  pageClip.preload = "auto";
+  pageClip.volume = 0.6;
+  function playPage() {
+    if (!on) return;
+    try { pageClip.currentTime = 0; const p = pageClip.play(); if (p && p.catch) p.catch(function () {}); } catch (e) {}
+  }
+  let last = -1;
+  function play() {
+    if (!on || !clips.length) return;
+    let i = Math.floor(Math.random() * clips.length);
+    if (clips.length > 1 && i === last) i = (i + 1) % clips.length;   // never the same sound twice in a row
+    last = i;
+    const a = clips[i];
+    try { a.currentTime = 0; const p = a.play(); if (p && p.catch) p.catch(function () {}); } catch (e) {}
+  }
+  function paint() {
+    if (!toggle) return;
+    toggle.textContent = on ? "🔊" : "🔇";
+    toggle.setAttribute("aria-pressed", String(on));
+    toggle.setAttribute("aria-label", "Suara klik: " + (on ? "nyala" : "mati"));
+  }
+  paint();
+  if (toggle) toggle.addEventListener("click", function () {
+    on = !on;
+    try { localStorage.setItem("sound", on ? "on" : "off"); } catch (e) {}
+    paint();
+    if (on) play();
+  });
+  document.addEventListener("click", function (e) {
+    // page buttons (links that jump to a section, with the bubble transition): the fixed page sound
+    const link = e.target.closest("a[href^='#']");
+    const href = link ? link.getAttribute("href") : "";
+    if (link && href.length > 1 && document.getElementById(href.slice(1))) { playPage(); return; }
+
+    // every other button: a random sound from the list
+    const el = e.target.closest(".btn, .icon-btn, .float-wa, button");
+    if (!el || el === toggle) return;
+    play();
+  });
+})();
+
+// ===== Card bubbles =====
+// Hover a card with the mouse for about 3 seconds and a few small bubbles float up from it.
+(function () {
+  if (!window.matchMedia("(hover: hover)").matches) return;                       // mouse only
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;      // respect "reduce motion"
+  const HOLD_MS = 3000;
+  const rand = function (min, max) { return Math.random() * (max - min) + min; };
+
+  function release(card) {
+    const w = card.offsetWidth, h = card.offsetHeight;
+    for (let i = 0; i < 6; i++) {
+      const size = rand(10, 26);
+      const b = document.createElement("span");
+      b.className = "bubble card-bubble";
+      b.style.setProperty("--size", size + "px");
+      b.style.setProperty("--swirl", rand(6, 12) + "s");
+      b.style.left = rand(w * 0.08, w * 0.92) + "px";
+      b.style.top = h + "px";
+      b.style.opacity = "0";
+      card.appendChild(b);
+      const rise = rand(70, 140), sway = rand(-18, 18);
+      const anim = b.animate([
+        { transform: "translate(0,0) scale(.6)", opacity: 0 },
+        { transform: "translate(" + sway / 2 + "px," + -rise * 0.3 + "px) scale(1)", opacity: 1, offset: 0.2 },
+        { transform: "translate(" + sway + "px," + -rise + "px) scale(1)", opacity: 0 }
+      ], { duration: rand(1700, 2500), delay: i * rand(80, 220), easing: "ease-out", fill: "both" });
+      anim.onfinish = function () { b.remove(); };
+    }
+  }
+
+  document.querySelectorAll(".card").forEach(function (card) {
+    let timer = null;
+    card.addEventListener("pointerenter", function (e) {
+      if (e.pointerType !== "mouse") return;
+      clearTimeout(timer);
+      timer = setTimeout(function () { release(card); }, HOLD_MS);
+    });
+    card.addEventListener("pointerleave", function () { clearTimeout(timer); });
+  });
+})();
+
+// ===== Price list tabs =====
+(function () {
+  const tabs = Array.prototype.slice.call(document.querySelectorAll(".tab"));
+  if (!tabs.length) return;
+  function select(tab, focus) {
+    tabs.forEach(function (t) {
+      const on = t === tab;
+      t.setAttribute("aria-selected", String(on));
+      t.tabIndex = on ? 0 : -1;
+      const panel = document.getElementById(t.getAttribute("aria-controls"));
+      if (panel) panel.hidden = !on;
+    });
+    if (focus) tab.focus();
+  }
+  tabs.forEach(function (tab, i) {
+    tab.addEventListener("click", function () { select(tab, false); });
+    tab.addEventListener("keydown", function (e) {      // arrow keys move between tabs
+      let j = -1;
+      if (e.key === "ArrowRight") j = (i + 1) % tabs.length;
+      if (e.key === "ArrowLeft") j = (i - 1 + tabs.length) % tabs.length;
+      if (j > -1) { e.preventDefault(); select(tabs[j], true); }
+    });
+  });
+})();
+
+// ===== "Harga per 2026" =====
+// Every <span class="price-year"> shows CONFIG.priceYear. Change the year in ONE place (CONFIG at the top) after you update your prices.
+document.querySelectorAll(".price-year").forEach(function (el) { el.textContent = CONFIG.priceYear; });
