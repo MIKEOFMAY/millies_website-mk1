@@ -374,3 +374,10 @@ input:focus,select:focus{outline:2px solid var(--blue-text);outline-offset:1px}
 .pgroup{font-size:.78rem;text-transform:uppercase;letter-spacing:.12em;color:var(--blue-text);margin:20px 0 0}
 .pgroup:first-child{margin-top:14px}
 .pname small.pnote{display:block;font-weight:400;color:var(--muted);font-size:.8rem;margin-top:1px}
+
+/* show the whole photo / video, no cropping */
+.media:not(.missing){aspect-ratio:auto}
+.media:not(.missing) img,
+.media:not(.missing) video{height:auto}
+.g2 .media-card:not(.missing){aspect-ratio:auto}
+.biz-media .media-card:not(.missing){height:auto;min-height:0}

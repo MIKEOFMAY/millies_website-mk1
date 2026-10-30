@@ -284,9 +284,9 @@ if (yearEl) yearEl.textContent = new Date().getFullYear();
 // ===== Click sounds =====
 // Put your 3-4 sound files in assets/sounds/ and list them here (mp3, ogg or wav). Missing files are skipped quietly.
 // Menu links and in-page buttons (Layanan, Lihat Harga, the logo...) play this ONE fixed sound instead of a random one.
-const PAGE_SFX_FILE = "assets/sounds/page.mp3";
+const PAGE_SFX_FILE = "assets/sound/sound - page_button.mp3";
 const SFX_FILES = [
-  "assets/sounds/sfx1.mp3",
+  "assets/sound/sound - button_1.wav",
   "assets/sounds/sfx2.mp3",
   "assets/sounds/sfx3.mp3",
   "assets/sounds/sfx4.mp3"
