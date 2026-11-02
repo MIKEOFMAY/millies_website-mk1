@@ -284,9 +284,9 @@ if (yearEl) yearEl.textContent = new Date().getFullYear();
 // ===== Click sounds =====
 // Put your 3-4 sound files in assets/sounds/ and list them here (mp3, ogg or wav). Missing files are skipped quietly.
 // Menu links and in-page buttons (Layanan, Lihat Harga, the logo...) play this ONE fixed sound instead of a random one.
-const PAGE_SFX_FILE = "assets/sound/sound - page_button.mp3";
+const PAGE_SFX_FILE = "assets/sounds/page.mp3";
 const SFX_FILES = [
-  "assets/sound/sound - button_1.wav",
+  "assets/sounds/sfx1.mp3",
   "assets/sounds/sfx2.mp3",
   "assets/sounds/sfx3.mp3",
   "assets/sounds/sfx4.mp3"
@@ -413,3 +413,45 @@ const SFX_FILES = [
 // ===== "Harga per 2026" =====
 // Every <span class="price-year"> shows CONFIG.priceYear. Change the year in ONE place (CONFIG at the top) after you update your prices.
 document.querySelectorAll(".price-year").forEach(function (el) { el.textContent = CONFIG.priceYear; });
+
+// ===== Count-up numbers (hero stats) =====
+// Put data-countup on any element. Every number inside it counts up from 0 when it scrolls into view.
+(function () {
+  const els = Array.prototype.slice.call(document.querySelectorAll("[data-countup]"));
+  if (!els.length) return;
+  const DURATION = 1600;   // how long the count takes, in milliseconds (1000 = 1 second)
+  const STAGGER = 150;     // delay between each stat, in milliseconds
+  const reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (reduce || !("IntersectionObserver" in window)) return;   // leave the final numbers as they are
+
+  function parts(el) {                       // "12–24 jam" -> ["", 12, "–", 24, " jam"]
+    return el.textContent.split(/(\d+)/);
+  }
+  function render(el, p, t) {
+    el.textContent = p.map(function (x, i) {
+      return i % 2 ? String(Math.round(Number(x) * t)) : x;
+    }).join("");
+  }
+  function run(el, delay) {
+    const p = el._parts;
+    render(el, p, 0);
+    setTimeout(function () {
+      const start = performance.now();
+      (function tick(now) {
+        const k = Math.min(1, (now - start) / DURATION);
+        render(el, p, 1 - Math.pow(1 - k, 3));          // starts fast, slows down at the end
+        if (k < 1) requestAnimationFrame(tick); else render(el, p, 1);
+      })(start);
+    }, delay);
+  }
+
+  els.forEach(function (el) { el._parts = parts(el); render(el, el._parts, 0); });
+  const io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (en) {
+      if (!en.isIntersecting) return;
+      io.unobserve(en.target);
+      run(en.target, els.indexOf(en.target) * STAGGER);
+    });
+  }, { threshold: 0.4 });
+  els.forEach(function (el) { io.observe(el); });
+})();

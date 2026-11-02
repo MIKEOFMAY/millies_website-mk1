@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Millie's Laundry – Laundry Kiloan & Dry Clean di Permata Hijau</title>
-<meta name="description" content="Millie's Laundry di Permata Hijau Suites: laundry kiloan, express, dry clean, cuci sepatu dan tas dengan antar-jemput. Harga jelas, hasil bersih dan wangi. Pesan lewat WhatsApp.">
+<meta name="description" content="Millie's Laundry di Permata Hijau Suites: laundry kiloan, express, dry clean, cuci sepatu dan tas, permak pakaian, dan reparasi sepatu dengan antar-jemput. Harga jelas, hasil bersih dan wangi. Pesan lewat WhatsApp.">
 <link rel="canonical" href="https://itsmillieslaundry.itsmillieslaundry.workers.dev/">
 <link rel="icon" type="image/x-icon" href="assets/images/favicon/millies - favicon.ico">
 <link rel="icon" type="image/png" sizes="32x32" href="assets/images/favicon/millies - favicon-32x32.png">
@@ -17,6 +17,73 @@
 <meta property="og:url" content="https://itsmillieslaundry.itsmillieslaundry.workers.dev/">
 <meta property="og:image" content="https://itsmillieslaundry.itsmillieslaundry.workers.dev/og-image.jpg">
 <link rel="stylesheet" href="style.css">
+<style id="layanan-style">
+/* ===== Layanan: geser ke samping + kategori ===== */
+.svc-chips{position:relative;z-index:7;display:flex;gap:8px;overflow-x:auto;padding:4px 2px 4px;scrollbar-width:thin}
+.svc-chip{flex:0 0 auto;padding:9px 18px;border-radius:999px;border:2px solid var(--blue);background:transparent;color:var(--blue-text);font:inherit;font-weight:600;font-size:.95rem;cursor:pointer;white-space:nowrap;transition:background .15s,color .15s}
+.svc-chip:hover{background:rgba(43,117,183,.12)}
+.svc-chip[aria-pressed="true"]{background:var(--blue);color:#fff}
+.svc-stage{position:relative}
+.svc-slider{display:flex;gap:18px;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x proximity;scroll-behavior:smooth;
+  padding:40px 18px 40px;margin:-14px -18px -40px;scroll-padding:0 18px;scrollbar-width:none;-webkit-overflow-scrolling:touch;
+  -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 18px,#000 calc(100% - 18px),transparent 100%);
+          mask-image:linear-gradient(90deg,transparent 0,#000 18px,#000 calc(100% - 18px),transparent 100%)}
+.svc-slider::-webkit-scrollbar{display:none}
+.svc-slider.dragging{scroll-snap-type:none;scroll-behavior:auto;cursor:grabbing;user-select:none}
+.svc-slider .card.service{flex:0 0 clamp(212px,72vw,252px);scroll-snap-align:start;padding:14px;
+  transition:transform .28s cubic-bezier(.2,.8,.2,1),box-shadow .28s,opacity .28s}
+.svc-slider .card.service[hidden]{display:none!important}
+.svc-slider .media-card.missing{aspect-ratio:1/1}
+.svc-slider .media video,.svc-slider .media img{transition:transform .5s cubic-bezier(.2,.8,.2,1)}
+.svc-slider .card.service h3{margin-top:2px}
+/* hover: the card lifts and grows, the picture zooms a little, the others dim a little */
+@media (hover:hover){
+  .svc-slider .card.service:hover,.svc-slider .card.service:focus-within{transform:translateY(-10px) scale(1.07);box-shadow:0 20px 38px rgba(96,56,19,.3);z-index:5}
+  .svc-slider .card.service:hover .media video,.svc-slider .card.service:hover .media img{transform:scale(1.07)}
+  .svc-slider:hover .card.service:not(:hover){opacity:.8}
+  .svc-slider{cursor:grab}
+}
+.svc-arrow{position:absolute;top:42%;z-index:6;width:46px;height:46px;border-radius:50%;border:0;background:var(--blue);color:#fff;font-size:1.7rem;line-height:1;cursor:pointer;box-shadow:0 6px 16px rgba(0,0,0,.25);display:none;align-items:center;justify-content:center;transition:transform .15s,opacity .2s}
+.svc-arrow:hover{transform:scale(1.1)}
+.svc-arrow[disabled]{opacity:0;pointer-events:none}
+.svc-arrow.prev{left:-14px}.svc-arrow.next{right:-14px}
+@media (hover:hover) and (min-width:700px){.svc-arrow{display:flex}}
+.svc-hint{margin-top:22px;font-size:.88rem;color:var(--muted);text-align:center}
+@media (prefers-reduced-motion:reduce){
+  .svc-slider{scroll-behavior:auto}
+  .svc-slider .card.service,.svc-slider .media video,.svc-slider .media img{transition:none}
+  .svc-slider .card.service:hover,.svc-slider .card.service:focus-within{transform:none}
+}
+</style>
+<style id="modern-style">
+/* ===== Tampilan modern: header kaca, kartu lembut, hero bergelombang ===== */
+:root{--wave:#fff6dc;--glass:rgba(253,183,19,0);--glass-on:rgba(253,183,19,.84)}
+:root[data-theme="dark"]{--wave:#24160a;--glass:rgba(36,22,10,.88);--glass-on:rgba(36,22,10,.94)}
+
+/* header: no blue line, frosted glass, sits on top of the hero */
+.site-header{margin-bottom:calc(-1 * var(--hdr-h,83px));border-bottom:0;background:var(--glass);
+  transition:background .25s,box-shadow .25s}
+.site-header.scrolled{background:var(--glass-on);box-shadow:0 8px 26px rgba(96,56,19,.16);
+  -webkit-backdrop-filter:blur(14px) saturate(1.3);backdrop-filter:blur(14px) saturate(1.3)}
+@media(max-width:900px){.nav{border-bottom:0;border-radius:0 0 18px 18px;box-shadow:0 16px 30px rgba(96,56,19,.2)}}
+
+/* the hero now starts at the very top, so it gets the header height as extra room */
+.hero{position:relative;padding-top:calc(var(--hdr-h,83px) + 235px);padding-bottom:120px}
+@media(max-width:1100px) and (min-width:901px){.hero{padding-top:calc(var(--hdr-h,83px) + 195px)}}
+@media(max-width:900px){.hero{padding-top:calc(var(--hdr-h,83px) + 150px);padding-bottom:110px}}
+
+/* number cards: no blue line, soft glass */
+.stats li{background:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.75);
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);box-shadow:0 10px 30px rgba(96,56,19,.1)}
+:root[data-theme="dark"] .stats li{background:rgba(255,248,229,.78);color:var(--brown)}
+:root[data-theme="dark"] .stats li span{color:var(--brown-muted)}
+
+/* curved bottom edge of the hero */
+.hero-wave{position:absolute;left:0;right:0;bottom:-1px;width:100%;height:70px;display:block;pointer-events:none}
+.hero-wave path{fill:var(--wave)}
+#keunggulan{background:linear-gradient(180deg,var(--wave) 0,var(--wave) 72%,var(--bg-alt) 100%)}
+:root:not([data-theme="dark"]) #keunggulan .card{background:#fff}
+</style>
 
 <script type="application/ld+json">
 {
@@ -72,22 +139,23 @@
       <div>
         <p class="eyebrow">Laundry · Permata Hijau Suites</p>
         <h1>Cucian beres. Hidup lega.</h1>
-        <p class="lead">Kiloan, sepatu, tas, dry clean. Kami jemput, cuci, dan antar.</p>
+        <p class="lead">Kiloan, sepatu, tas, dry clean, permak. Kami jemput, kerjakan, dan antar.</p>
         <div class="cta-row">
           <a class="btn btn-wa" data-wa href="https://wa.me/6281297399978">Pesan di WhatsApp</a>
           <a class="btn btn-ghost" href="#layanan">Lihat Harga</a>
         </div>
       </div>
       <div class="hero-side">
-        <figure class="media media-card" data-label="Foto · laundry express"><video src="assets/videos/video - laundry_20.mp4" width="360" height="360" autoplay muted loop playsinline preload="metadata" onerror="this.parentElement.classList.add('missing');this.remove()"></video></figure>
+        <figure class="media media-card" data-label="Video · utama"><video src="assets/videos/video - laundry_20.mp4" width="360" height="360" autoplay muted loop playsinline preload="metadata" onerror="this.parentElement.classList.add('missing');this.remove()"></video></figure>
         <ul class="stats" aria-label="Ringkasan">
-        <li><strong>300+</strong><span>Pelanggan puas</span></li>
-        <li><strong>30+</strong><span>Jenis layanan</span></li>
-        <li><strong>12–24 jam</strong><span>Express</span></li>
+        <li><strong data-countup>300+</strong><span>Pelanggan puas</span></li>
+        <li><strong data-countup>30+</strong><span>Jenis layanan</span></li>
+        <li><strong data-countup>12–24 jam</strong><span>Express</span></li>
         <li><strong>Gratis</strong><span>Antar-jemput*</span></li>
       </ul>
       </div>
     </div>
+    <svg class="hero-wave" viewBox="0 0 1440 90" preserveAspectRatio="none" aria-hidden="true"><path d="M0,40 C240,95 480,95 720,55 C960,15 1200,10 1440,50 L1440,90 L0,90 Z"/></svg>
   </section>
 
   <section id="keunggulan" class="section">
@@ -113,10 +181,16 @@
       <h2>Layanan & Harga</h2>
       <p class="sub">Harga per <span class="price-year">2026</span>, mulai dari. Harga pasti kami kabari lewat WhatsApp sebelum cucian dicuci.</p>
 
-      <div class="grid g4 reveal">
-        <article class="card service">
+      <div class="svc reveal">
+        <div class="svc-chips" role="group" aria-label="Pilih kategori layanan">
+          <button class="svc-chip" type="button" data-cat="all" aria-pressed="true">Semua</button><button class="svc-chip" type="button" data-cat="kiloan" aria-pressed="false">Kiloan</button><button class="svc-chip" type="button" data-cat="pakaian" aria-pressed="false">Pakaian</button><button class="svc-chip" type="button" data-cat="sepatu" aria-pressed="false">Sepatu & Tas</button><button class="svc-chip" type="button" data-cat="rumah" aria-pressed="false">Rumah</button><button class="svc-chip" type="button" data-cat="permak" aria-pressed="false">Permak & Reparasi</button>
+        </div>
+        <div class="svc-stage">
+          <button class="svc-arrow prev" type="button" aria-label="Geser ke kiri" disabled>‹</button>
+          <div class="svc-slider" id="svcSlider" role="region" aria-label="Daftar layanan, geser ke samping" tabindex="0">
+        <article class="card service" data-cat="kiloan">
         <div class="smedia">
-          <figure class="media media-card" data-label="Foto · laundry express"><video src="assets/videos/video - laundry_9.mp4" width="360" height="360" autoplay muted loop playsinline preload="metadata" onerror="this.parentElement.classList.add('missing');this.remove()"></video></figure>
+          <figure class="media media-card" data-label="Video · Kiloan Reguler"><video src="assets/videos/video - laundry_9.mp4" width="360" height="360" autoplay muted loop playsinline preload="metadata" onerror="this.parentElement.classList.add('missing');this.remove()"></video></figure>
           <span class="badge">Paling populer</span>
           </div>
           <h3>Kiloan Reguler</h3>
@@ -124,59 +198,77 @@
           <div class="price"><small class="from">Mulai dari</small>Rp 20.000<small>/kg</small></div>
           <a class="btn btn-ghost btn-sm" data-wa data-wa-msg="Halo, saya mau tanya laundry kiloan reguler." href="https://wa.me/6281297399978">Tanya harga</a>
           </article>
-        <article class="card service">
+        <article class="card service" data-cat="kiloan">
           <div class="smedia">
-            <figure class="media media-card" data-label="Foto · laundry express"><video src="assets/videos/video - laundry_3.mp4" width="360" height="360" autoplay muted loop playsinline preload="metadata" onerror="this.parentElement.classList.add('missing');this.remove()"></video></figure></div>
+            <figure class="media media-card" data-label="Video · Express"><video src="assets/videos/video - laundry_3.mp4" width="360" height="360" autoplay muted loop playsinline preload="metadata" onerror="this.parentElement.classList.add('missing');this.remove()"></video></figure></div>
 
           <h3>Express</h3>
           <p>Jadi dalam 12–24 jam.</p>
           <div class="price"><small class="from">Mulai dari</small>Rp 28.000<small>/kg</small></div>
           <a class="btn btn-ghost btn-sm" data-wa data-wa-msg="Halo, saya mau tanya laundry express." href="https://wa.me/6281297399978">Tanya harga</a>
         </article>
-        <article class="card service">
+        <article class="card service" data-cat="pakaian">
           <div class="smedia">
-            <figure class="media media-card" data-label="Foto · laundry express"><video src="assets/videos/video - laundry_12.mp4" width="360" height="360" autoplay muted loop playsinline preload="metadata" onerror="this.parentElement.classList.add('missing');this.remove()"></video></figure></div>
+            <figure class="media media-card" data-label="Video · Dry Clean"><video src="assets/videos/video - laundry_12.mp4" width="360" height="360" autoplay muted loop playsinline preload="metadata" onerror="this.parentElement.classList.add('missing');this.remove()"></video></figure></div>
           <h3>Dry Clean</h3>
           <p>Jas, gaun, blazer, kebaya.</p>
           <div class="price"><small class="from">Mulai dari</small>Rp 45.000<small>/pcs</small></div>
           <a class="btn btn-ghost btn-sm" data-wa data-wa-msg="Halo, saya mau tanya dry clean." href="https://wa.me/6281297399978">Tanya harga</a>
         </article>
-        <article class="card service">
-          <div class="smedia">
-            <figure class="media media-card" data-label="Foto · laundry express"><video src="assets/videos/video - laundry_4.mp4" width="360" height="360" autoplay muted loop playsinline preload="metadata" onerror="this.parentElement.classList.add('missing');this.remove()"></video></figure></div>
-          <h3>Cuci Sepatu</h3>
-          <p>Sneakers, kulit, suede. Kirim foto dulu.</p>
-          <div class="price"><small class="from">Mulai dari</small>Rp 85.000<small>/pasang</small></div>
-          <a class="btn btn-ghost btn-sm" data-wa data-wa-msg="Halo, saya mau cuci sepatu. Ini fotonya:" href="https://wa.me/6281297399978">Kirim foto</a>
-        </article>
-        <article class="card service">
-          <div class="smedia"><figure class="media media-card" data-label="Foto · laundry express"><video src="assets/videos/video - laundry_5.mp4" width="360" height="360" autoplay muted loop playsinline preload="metadata" onerror="this.parentElement.classList.add('missing');this.remove()"></video></figure></div>
-          <h3>Cuci Tas</h3>
-          <p>Tas harian sampai premium.</p>
-          <div class="price"><small class="from">Mulai dari</small>Rp 115.000<small>/pcs</small></div>
-          <a class="btn btn-ghost btn-sm" data-wa data-wa-msg="Halo, saya mau cuci tas. Ini fotonya:" href="https://wa.me/6281297399978">Kirim foto</a>
-        </article>
-        <article class="card service">
-          <div class="smedia"><figure class="media media-card" data-label="Foto · laundry express"><video src="assets/videos/video - laundry_6.mp4" width="360" height="360" autoplay muted loop playsinline preload="metadata" onerror="this.parentElement.classList.add('missing');this.remove()"></video></figure></div>
-          <h3>Bedcover & Selimut</h3>
-          <p>Bersih sampai dalam. Cepat kering.</p>
-          <div class="price"><small class="from">Mulai dari</small>Rp 35.000<small>/pcs</small></div>
-          <a class="btn btn-ghost btn-sm" data-wa data-wa-msg="Halo, saya mau tanya cuci bedcover." href="https://wa.me/6281297399978">Tanya harga</a>
-        </article>
-        <article class="card service">
-          <div class="smedia"><figure class="media media-card" data-label="Foto · laundry express"><video src="assets/videos/video - laundry_7.mp4" width="360" height="360" autoplay muted loop playsinline preload="metadata" onerror="this.parentElement.classList.add('missing');this.remove()"></video></figure></div>
-          <h3>Karpet & Gorden</h3>
-          <p>Harga sesuai ukuran.</p>
-          <div class="price"><small class="from">Mulai dari</small>Rp 40.000<small>/m²</small></div>
-          <a class="btn btn-ghost btn-sm" data-wa data-wa-msg="Halo, saya mau tanya cuci karpet/gorden. Ukurannya:" href="https://wa.me/6281297399978">Tanya harga</a>
-        </article>
-        <article class="card service">
-          <div class="smedia"><figure class="media media-card" data-label="Foto · laundry express"><video src="assets/videos/video - laundry_1.mp4" width="360" height="360" autoplay muted loop playsinline preload="metadata" onerror="this.parentElement.classList.add('missing');this.remove()"></video></figure></div>
+        <article class="card service" data-cat="pakaian">
+          <div class="smedia"><figure class="media media-card" data-label="Video · Hilangkan Noda"><video src="assets/videos/video - laundry_1.mp4" width="360" height="360" autoplay muted loop playsinline preload="metadata" onerror="this.parentElement.classList.add('missing');this.remove()"></video></figure></div>
           <h3>Hilangkan Noda</h3>
           <p>Tinta, karat, luntur.</p>
           <div class="price price-quote">Cek noda gratis lewat foto</div>
           <a class="btn btn-ghost btn-sm" data-wa data-wa-msg="Halo, saya mau cek noda di pakaian. Ini fotonya:" href="https://wa.me/6281297399978">Kirim foto</a>
         </article>
+        <article class="card service" data-cat="sepatu">
+          <div class="smedia">
+            <figure class="media media-card" data-label="Video · Cuci Sepatu"><video src="assets/videos/video - laundry_4.mp4" width="360" height="360" autoplay muted loop playsinline preload="metadata" onerror="this.parentElement.classList.add('missing');this.remove()"></video></figure></div>
+          <h3>Cuci Sepatu</h3>
+          <p>Sneakers, kulit, suede. Kirim foto dulu.</p>
+          <div class="price"><small class="from">Mulai dari</small>Rp 85.000<small>/pasang</small></div>
+          <a class="btn btn-ghost btn-sm" data-wa data-wa-msg="Halo, saya mau cuci sepatu. Ini fotonya:" href="https://wa.me/6281297399978">Kirim foto</a>
+        </article>
+        <article class="card service" data-cat="sepatu">
+          <div class="smedia"><figure class="media media-card" data-label="Video · Cuci Tas"><video src="assets/videos/video - laundry_5.mp4" width="360" height="360" autoplay muted loop playsinline preload="metadata" onerror="this.parentElement.classList.add('missing');this.remove()"></video></figure></div>
+          <h3>Cuci Tas</h3>
+          <p>Tas harian sampai premium.</p>
+          <div class="price"><small class="from">Mulai dari</small>Rp 115.000<small>/pcs</small></div>
+          <a class="btn btn-ghost btn-sm" data-wa data-wa-msg="Halo, saya mau cuci tas. Ini fotonya:" href="https://wa.me/6281297399978">Kirim foto</a>
+        </article>
+        <article class="card service" data-cat="rumah">
+          <div class="smedia"><figure class="media media-card" data-label="Video · Bedcover & Selimut"><video src="assets/videos/video - laundry_6.mp4" width="360" height="360" autoplay muted loop playsinline preload="metadata" onerror="this.parentElement.classList.add('missing');this.remove()"></video></figure></div>
+          <h3>Bedcover & Selimut</h3>
+          <p>Bersih sampai dalam. Cepat kering.</p>
+          <div class="price"><small class="from">Mulai dari</small>Rp 35.000<small>/pcs</small></div>
+          <a class="btn btn-ghost btn-sm" data-wa data-wa-msg="Halo, saya mau tanya cuci bedcover." href="https://wa.me/6281297399978">Tanya harga</a>
+        </article>
+        <article class="card service" data-cat="rumah">
+          <div class="smedia"><figure class="media media-card" data-label="Video · Karpet & Gorden"><video src="assets/videos/video - laundry_7.mp4" width="360" height="360" autoplay muted loop playsinline preload="metadata" onerror="this.parentElement.classList.add('missing');this.remove()"></video></figure></div>
+          <h3>Karpet & Gorden</h3>
+          <p>Harga sesuai ukuran.</p>
+          <div class="price"><small class="from">Mulai dari</small>Rp 40.000<small>/m²</small></div>
+          <a class="btn btn-ghost btn-sm" data-wa data-wa-msg="Halo, saya mau tanya cuci karpet/gorden. Ukurannya:" href="https://wa.me/6281297399978">Tanya harga</a>
+        </article>
+        <article class="card service" data-cat="permak">
+          <div class="smedia"><figure class="media media-card" data-label="Video · permak pakaian"><video src="assets/videos/layanan-permak.mp4" width="360" height="360" autoplay muted loop playsinline preload="metadata" onerror="this.parentElement.classList.add('missing');this.remove()"></video></figure><span class="badge">Baru</span></div>
+          <h3>Permak Pakaian</h3>
+          <p>Potong, kecilkan, lebarkan, ganti resleting.</p>
+          <div class="price"><small class="from">Mulai dari</small>Rp 30.000<small>/pcs</small></div>
+          <a class="btn btn-ghost btn-sm" data-wa data-wa-msg="Halo, saya mau permak pakaian. Ini fotonya dan yang mau diubah:" href="https://wa.me/6281297399978">Kirim foto</a>
+        </article>
+        <article class="card service" data-cat="permak">
+          <div class="smedia"><figure class="media media-card" data-label="Video · reparasi sepatu"><video src="assets/videos/layanan-reparasi-sepatu.mp4" width="360" height="360" autoplay muted loop playsinline preload="metadata" onerror="this.parentElement.classList.add('missing');this.remove()"></video></figure><span class="badge">Baru</span></div>
+          <h3>Reparasi Sepatu</h3>
+          <p>Lem sol, ganti sol, cat ulang, lebarkan.</p>
+          <div class="price"><small class="from">Mulai dari</small>Rp 50.000<small>/pasang</small></div>
+          <a class="btn btn-ghost btn-sm" data-wa data-wa-msg="Halo, saya mau reparasi sepatu. Ini fotonya dan yang rusak:" href="https://wa.me/6281297399978">Kirim foto</a>
+        </article>
+          </div>
+          <button class="svc-arrow next" type="button" aria-label="Geser ke kanan">›</button>
+        </div>
+        <p class="svc-hint">Geser untuk lihat layanan lainnya →</p>
       </div>
 
       <h3 class="subhead">Daftar Harga Lengkap <small class="asof">per <span class="price-year">2026</span></small></h3>
@@ -184,8 +276,9 @@
         <button class="tab" type="button" role="tab" id="tab-kiloan" aria-controls="panel-kiloan" aria-selected="true" tabindex="0">Kiloan</button>
         <button class="tab" type="button" role="tab" id="tab-satuan" aria-controls="panel-satuan" aria-selected="false" tabindex="-1">Satuan</button>
         <button class="tab" type="button" role="tab" id="tab-dryclean" aria-controls="panel-dryclean" aria-selected="false" tabindex="-1">Dry Clean</button>
-        <button class="tab" type="button" role="tab" id="tab-rumah" aria-controls="panel-rumah" aria-selected="false" tabindex="-1">Rumah</button>
         <button class="tab" type="button" role="tab" id="tab-sepatutas" aria-controls="panel-sepatutas" aria-selected="false" tabindex="-1">Sepatu & Tas</button>
+        <button class="tab" type="button" role="tab" id="tab-rumah" aria-controls="panel-rumah" aria-selected="false" tabindex="-1">Rumah</button>
+        <button class="tab" type="button" role="tab" id="tab-permak" aria-controls="panel-permak" aria-selected="false" tabindex="-1">Permak & Reparasi</button>
         <button class="tab" type="button" role="tab" id="tab-bayi" aria-controls="panel-bayi" aria-selected="false" tabindex="-1">Bayi</button>
       </div>
       <div class="panel" role="tabpanel" id="panel-kiloan" aria-labelledby="tab-kiloan">
@@ -252,6 +345,27 @@
         <a class="btn btn-wa btn-sm" data-wa data-wa-msg="Halo, saya mau tanya dry clean." href="https://wa.me/6281297399978">Tanya dry clean</a>
       </div>
 
+      <div class="panel" role="tabpanel" id="panel-sepatutas" aria-labelledby="tab-sepatutas" hidden>
+          <h4 class="pgroup">Sepatu</h4>
+          <ul class="plist">
+            <li><span class="pname">Sneakers, sepatu canvas<small class="pnote">Dibersihkan luar dan dalam</small></span><span class="pprice"><small>Mulai dari</small> Rp 85.000<small>/pasang</small></span></li>
+            <li><span class="pname">Sepatu kulit, formal, boots<small class="pnote">Perawatan khusus kulit</small></span><span class="pprice"><small>Mulai dari</small> Rp 120.000<small>/pasang</small></span></li>
+          </ul>
+          <h4 class="pgroup">Tas</h4>
+          <ul class="plist">
+            <li><span class="pname">Tas ransel<small class="pnote">Termasuk bagian dalam</small></span><span class="pprice"><small>Mulai dari</small> Rp 115.000<small>/pcs</small></span></li>
+            <li><span class="pname">Tas tangan (ukuran medium)</span><span class="pprice"><small>Mulai dari</small> Rp 290.000<small>/pcs</small></span></li>
+            <li><span class="pname">Koper<small class="pnote">Harga sesuai ukuran</small></span><span class="pprice"><small>Mulai dari</small> Rp 115.000<small>/pcs</small></span></li>
+          </ul>
+          <h4 class="pgroup">Barang spesial</h4>
+          <ul class="plist">
+            <li><span class="pname">Boneka (kecil, sedang, besar)<small class="pnote">Harga sesuai ukuran</small></span><span class="pprice"><small>Mulai dari</small> Rp 35.000<small>/pcs</small></span></li>
+            <li><span class="pname">Helm (half face, full face)<small class="pnote">Busa dalam dibersihkan</small></span><span class="pprice"><small>Mulai dari</small> Rp 30.000<small>/pcs</small></span></li>
+          </ul>
+        <p class="note">Kirim foto dulu. Harga pasti kami kabari lewat WhatsApp.</p>
+        <a class="btn btn-wa btn-sm" data-wa data-wa-msg="Halo, saya mau cuci sepatu/tas. Ini fotonya:" href="https://wa.me/6281297399978">Kirim foto</a>
+      </div>
+
       <div class="panel" role="tabpanel" id="panel-rumah" aria-labelledby="tab-rumah" hidden>
           <h4 class="pgroup">Tempat tidur</h4>
           <ul class="plist">
@@ -282,25 +396,55 @@
         <a class="btn btn-wa btn-sm" data-wa data-wa-msg="Halo, saya mau tanya cuci perlengkapan rumah." href="https://wa.me/6281297399978">Tanya harga</a>
       </div>
 
-      <div class="panel" role="tabpanel" id="panel-sepatutas" aria-labelledby="tab-sepatutas" hidden>
-          <h4 class="pgroup">Sepatu</h4>
+      <div class="panel" role="tabpanel" id="panel-permak" aria-labelledby="tab-permak" hidden>
+          <h4 class="pgroup">Celana</h4>
           <ul class="plist">
-            <li><span class="pname">Sneakers, sepatu canvas<small class="pnote">Dibersihkan luar dan dalam</small></span><span class="pprice"><small>Mulai dari</small> Rp 85.000<small>/pasang</small></span></li>
-            <li><span class="pname">Sepatu kulit, formal, boots<small class="pnote">Perawatan khusus kulit</small></span><span class="pprice"><small>Mulai dari</small> Rp 120.000<small>/pasang</small></span></li>
+            <li><span class="pname">Potong / pendekkan celana<small class="pnote">Hem biasa · 1–2 hari</small></span><span class="pprice"><small>Mulai dari</small> Rp 30.000<small>/pcs</small></span></li>
+            <li><span class="pname">Potong jeans, hem asli dipertahankan<small class="pnote">Bekas jahitan asli tetap ada</small></span><span class="pprice"><small>Mulai dari</small> Rp 55.000<small>/pcs</small></span></li>
+            <li><span class="pname">Kecilkan atau lebarkan pinggang</span><span class="pprice"><small>Mulai dari</small> Rp 45.000<small>/pcs</small></span></li>
+            <li><span class="pname">Kecilkan paha atau kaki celana</span><span class="pprice"><small>Mulai dari</small> Rp 50.000<small>/pcs</small></span></li>
+            <li><span class="pname">Ganti resleting celana atau rok</span><span class="pprice"><small>Mulai dari</small> Rp 40.000<small>/pcs</small></span></li>
           </ul>
-          <h4 class="pgroup">Tas</h4>
+          <h4 class="pgroup">Atasan</h4>
           <ul class="plist">
-            <li><span class="pname">Tas ransel<small class="pnote">Termasuk bagian dalam</small></span><span class="pprice"><small>Mulai dari</small> Rp 115.000<small>/pcs</small></span></li>
-            <li><span class="pname">Tas tangan (ukuran medium)</span><span class="pprice"><small>Mulai dari</small> Rp 290.000<small>/pcs</small></span></li>
-            <li><span class="pname">Koper<small class="pnote">Harga sesuai ukuran</small></span><span class="pprice"><small>Mulai dari</small> Rp 115.000<small>/pcs</small></span></li>
+            <li><span class="pname">Potong lengan kemeja atau blus</span><span class="pprice"><small>Mulai dari</small> Rp 40.000<small>/pcs</small></span></li>
+            <li><span class="pname">Kecilkan badan kemeja atau blus<small class="pnote">2–3 hari</small></span><span class="pprice"><small>Mulai dari</small> Rp 60.000<small>/pcs</small></span></li>
+            <li><span class="pname">Potong panjang baju atau kaos</span><span class="pprice"><small>Mulai dari</small> Rp 35.000<small>/pcs</small></span></li>
+            <li><span class="pname">Ganti resleting jaket</span><span class="pprice"><small>Mulai dari</small> Rp 70.000<small>/pcs</small></span></li>
           </ul>
-          <h4 class="pgroup">Barang spesial</h4>
+          <h4 class="pgroup">Rok, dress & gamis</h4>
           <ul class="plist">
-            <li><span class="pname">Boneka (kecil, sedang, besar)<small class="pnote">Harga sesuai ukuran</small></span><span class="pprice"><small>Mulai dari</small> Rp 35.000<small>/pcs</small></span></li>
-            <li><span class="pname">Helm (half face, full face)<small class="pnote">Busa dalam dibersihkan</small></span><span class="pprice"><small>Mulai dari</small> Rp 30.000<small>/pcs</small></span></li>
+            <li><span class="pname">Potong rok</span><span class="pprice"><small>Mulai dari</small> Rp 35.000<small>/pcs</small></span></li>
+            <li><span class="pname">Kecilkan atau lebarkan dress, gamis<small class="pnote">Harga tergantung model</small></span><span class="pprice"><small>Mulai dari</small> Rp 90.000<small>/pcs</small></span></li>
+            <li><span class="pname">Ganti resleting dress</span><span class="pprice"><small>Mulai dari</small> Rp 50.000<small>/pcs</small></span></li>
           </ul>
-        <p class="note">Kirim foto dulu. Harga pasti kami kabari lewat WhatsApp.</p>
-        <a class="btn btn-wa btn-sm" data-wa data-wa-msg="Halo, saya mau cuci sepatu/tas. Ini fotonya:" href="https://wa.me/6281297399978">Kirim foto</a>
+          <h4 class="pgroup">Jas & kebaya</h4>
+          <ul class="plist">
+            <li><span class="pname">Potong lengan jas atau blazer<small class="pnote">3–5 hari</small></span><span class="pprice"><small>Mulai dari</small> Rp 100.000<small>/pcs</small></span></li>
+            <li><span class="pname">Kecilkan badan jas atau blazer<small class="pnote">Coba dulu di toko · 5–7 hari</small></span><span class="pprice"><small>Mulai dari</small> Rp 150.000<small>/pcs</small></span></li>
+            <li><span class="pname">Permak kebaya atau gaun pesta<small class="pnote">Coba dulu di toko · 5–7 hari</small></span><span class="pprice"><small>Mulai dari</small> Rp 120.000<small>/pcs</small></span></li>
+          </ul>
+          <h4 class="pgroup">Perbaikan kecil</h4>
+          <ul class="plist">
+            <li><span class="pname">Pasang atau ganti kancing</span><span class="pprice"><small>Mulai dari</small> Rp 5.000<small>/pcs</small></span></li>
+            <li><span class="pname">Jahit sobek atau tambal kecil</span><span class="pprice"><small>Mulai dari</small> Rp 20.000<small>/pcs</small></span></li>
+            <li><span class="pname">Jahit ulang kelim atau jahitan lepas</span><span class="pprice"><small>Mulai dari</small> Rp 25.000<small>/pcs</small></span></li>
+            <li><span class="pname">Ganti karet pinggang</span><span class="pprice"><small>Mulai dari</small> Rp 30.000<small>/pcs</small></span></li>
+            <li><span class="pname">Tambal tenun (invisible mending)<small class="pnote">Untuk bahan bagus yang bolong</small></span><span class="pprice"><small>Mulai dari</small> Rp 90.000<small>/pcs</small></span></li>
+          </ul>
+          <h4 class="pgroup">Reparasi sepatu</h4>
+          <ul class="plist">
+            <li><span class="pname">Lem sol lepas<small class="pnote">2–3 hari</small></span><span class="pprice"><small>Mulai dari</small> Rp 50.000<small>/pasang</small></span></li>
+            <li><span class="pname">Jahit sol atau bagian atas</span><span class="pprice"><small>Mulai dari</small> Rp 70.000<small>/pasang</small></span></li>
+            <li><span class="pname">Ganti sol<small class="pnote">Sol karet · 4–7 hari</small></span><span class="pprice"><small>Mulai dari</small> Rp 175.000<small>/pasang</small></span></li>
+            <li><span class="pname">Ganti insole</span><span class="pprice"><small>Mulai dari</small> Rp 45.000<small>/pasang</small></span></li>
+            <li><span class="pname">Ganti tumit (heel tap)</span><span class="pprice"><small>Mulai dari</small> Rp 60.000<small>/pasang</small></span></li>
+            <li><span class="pname">Lebarkan sepatu yang sempit<small class="pnote">Untuk kulit dan kanvas</small></span><span class="pprice"><small>Mulai dari</small> Rp 80.000<small>/pasang</small></span></li>
+            <li><span class="pname">Cat ulang atau pulihkan warna<small class="pnote">4–7 hari</small></span><span class="pprice"><small>Mulai dari</small> Rp 200.000<small>/pasang</small></span></li>
+            <li><span class="pname">Ganti resleting sepatu atau boots</span><span class="pprice"><small>Mulai dari</small> Rp 120.000<small>/pasang</small></span></li>
+          </ul>
+        <p class="note">Kirim foto dan tulis bagian yang mau diubah. Untuk jas, kebaya, dan permak badan, kami sarankan coba dan tandai ukuran di toko. Setelah kain dipotong, ukuran tidak bisa dikembalikan, jadi ukurannya kita sepakati dulu.</p>
+        <a class="btn btn-wa btn-sm" data-wa data-wa-msg="Halo, saya mau permak atau reparasi. Ini fotonya dan yang mau diubah:" href="https://wa.me/6281297399978">Kirim foto</a>
       </div>
 
       <div class="panel" role="tabpanel" id="panel-bayi" aria-labelledby="tab-bayi" hidden>
@@ -326,6 +470,7 @@
         <p class="note">Kirim foto dulu. Harga pasti dan waktu pengerjaan kami kabari lewat WhatsApp.</p>
         <a class="btn btn-wa btn-sm" data-wa data-wa-msg="Halo, saya mau cuci perlengkapan bayi. Ini fotonya:" href="https://wa.me/6281297399978">Kirim foto</a>
       </div>
+
       <aside class="disclaimer" role="note">
         <strong>Catatan soal harga</strong>
         <p>Harga di halaman ini adalah harga mulai dari, per <span class="price-year">2026</span>. Harga bisa berubah sewaktu-waktu, misalnya karena biaya bahan naik, jenis kain, atau kondisi cucian. Harga pasti kami kabari lewat WhatsApp sebelum cucian dicuci. Kalau harganya belum cocok, tidak apa-apa. Cucian tidak kami proses.</p>
@@ -335,14 +480,14 @@
       <p class="subhead-note">Cuci rutin, harga lebih hemat, nol mikir.</p>
       <div class="grid g2 reveal">
         <article class="card service">
-          <div class="smedia"><figure class="media media-card" data-label="Foto · laundry express"><video src="assets/videos/video - laundry_7.mp4" width="360" height="360" autoplay muted loop playsinline preload="metadata" onerror="this.parentElement.classList.add('missing');this.remove()"></video></figure><span class="badge">Lebih hemat</span></div>
+          <div class="smedia"><figure class="media media-card" data-label="Video · Paket Mingguan"><video src="assets/videos/video - laundry_7.mp4" width="360" height="360" autoplay muted loop playsinline preload="metadata" onerror="this.parentElement.classList.add('missing');this.remove()"></video></figure><span class="badge">Lebih hemat</span></div>
           <h3>Paket Mingguan</h3>
           <p>10 kg tiap minggu. Jemput dan antar terjadwal.</p>
           <div class="price"><small class="from">Mulai dari</small>Rp 170.000<small>/minggu</small></div>
           <a class="btn btn-wa btn-sm" data-wa data-wa-msg="Halo, saya tertarik Paket Mingguan." href="https://wa.me/6281297399978">Ambil paket</a>
         </article>
         <article class="card service">
-          <div class="smedia"><figure class="media media-card" data-label="Foto · laundry express"><video src="assets/videos/video - laundry_18.mp4" width="360" height="360" autoplay muted loop playsinline preload="metadata" onerror="this.parentElement.classList.add('missing');this.remove()"></video></figure></div>
+          <div class="smedia"><figure class="media media-card" data-label="Video · Langganan Bulanan"><video src="assets/videos/video - laundry_18.mp4" width="360" height="360" autoplay muted loop playsinline preload="metadata" onerror="this.parentElement.classList.add('missing');this.remove()"></video></figure></div>
           <h3>Langganan Bulanan</h3>
           <p>40 kg tiap bulan. Cuci rutin, tanpa mikir.</p>
           <div class="price"><small class="from">Mulai dari</small>Rp 640.000<small>/bulan</small></div>
@@ -351,7 +496,7 @@
       </div>
 
       <article class="card biz reveal">
-        <div class="biz-media"><figure class="media media-card" data-label="Foto · laundry express"><video src="assets/videos/video - laundry_15.mp4" width="360" height="360" autoplay muted loop playsinline preload="metadata" onerror="this.parentElement.classList.add('missing');this.remove()"></video></figure></div>
+        <div class="biz-media"><figure class="media media-card" data-label="Video · Gym, Padel, Hotel, Kos & Kantor"><video src="assets/videos/video - laundry_15.mp4" width="360" height="360" autoplay muted loop playsinline preload="metadata" onerror="this.parentElement.classList.add('missing');this.remove()"></video></figure></div>
         <div>
           <span class="badge">Untuk bisnis</span>
           <h3>Gym, Padel, Hotel, Kos & Kantor</h3>
@@ -371,13 +516,25 @@
         <div class="est-row">
           <label>Layanan
             <select id="estService">
-              <option value="Kiloan Reguler" data-unit="kg" data-min="20000">Kiloan Reguler (per kg)</option>
-              <option value="Express" data-unit="kg" data-min="28000">Express (per kg)</option>
-              <option value="Dry Clean" data-unit="pcs" data-min="45000">Dry Clean (per pcs)</option>
-              <option value="Cuci Sepatu" data-unit="pasang" data-min="85000">Cuci Sepatu (per pasang)</option>
-              <option value="Cuci Tas" data-unit="pcs" data-min="115000">Cuci Tas (per pcs)</option>
-              <option value="Bedcover & Selimut" data-unit="pcs" data-min="35000">Bedcover & Selimut (per pcs)</option>
-              <option value="Karpet & Gorden" data-unit="m²" data-min="40000">Karpet & Gorden (per m²)</option>
+              <optgroup label="Kiloan">
+                <option value="Kiloan Reguler" data-unit="kg" data-min="20000">Kiloan Reguler (per kg)</option>
+                <option value="Express" data-unit="kg" data-min="28000">Express (per kg)</option>
+              </optgroup>
+              <optgroup label="Pakaian">
+                <option value="Dry Clean" data-unit="pcs" data-min="45000">Dry Clean (per pcs)</option>
+              </optgroup>
+              <optgroup label="Sepatu &amp; Tas">
+                <option value="Cuci Sepatu" data-unit="pasang" data-min="85000">Cuci Sepatu (per pasang)</option>
+                <option value="Cuci Tas" data-unit="pcs" data-min="115000">Cuci Tas (per pcs)</option>
+              </optgroup>
+              <optgroup label="Rumah">
+                <option value="Bedcover & Selimut" data-unit="pcs" data-min="35000">Bedcover & Selimut (per pcs)</option>
+                <option value="Karpet & Gorden" data-unit="m²" data-min="40000">Karpet & Gorden (per m²)</option>
+              </optgroup>
+              <optgroup label="Permak &amp; Reparasi">
+                <option value="Permak Pakaian" data-unit="pcs" data-min="30000">Permak Pakaian (per pcs)</option>
+                <option value="Reparasi Sepatu" data-unit="pasang" data-min="50000">Reparasi Sepatu (per pasang)</option>
+              </optgroup>
             </select>
           </label>
           <label><span id="estQtyLabel">Berat (kg)</span>
@@ -459,6 +616,16 @@
         <details>
           <summary>Antar-jemput sampai mana?</summary>
           <p>Permata Hijau, Kebayoran Lama, sekitar GBK, dan sekitarnya (radius ±5 km). Gratis untuk order min. Rp 100.000. Di bawah itu ada ongkos kurir, kami kabari dulu. Di luar radius? Tanya lewat WhatsApp.</p>
+        </details>
+
+        <details>
+          <summary>Permak dan reparasi sepatu, berapa lama?</summary>
+          <p>Permak ringan seperti potong celana atau ganti resleting biasanya 1–3 hari. Jas dan kebaya 5–7 hari. Ganti sol atau cat ulang sepatu 4–7 hari. Estimasi pasti kami kabari setelah lihat fotonya.</p>
+        </details>
+
+        <details>
+          <summary>Hasil permak tidak pas, bagaimana?</summary>
+          <p>Kami kerjakan sesuai ukuran yang disepakati. Kalau hasilnya tidak sesuai kesepakatan, kabari kami dalam 3 hari setelah barang diterima dan kami perbaiki. Setelah kain dipotong, ukuran tidak bisa dikembalikan ke semula.</p>
         </details>
 
         <details>
@@ -560,6 +727,81 @@
 <div id="bubble-overlay" class="bubble-overlay" aria-hidden="true"></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+<script>
+(function () {
+  var h = document.querySelector(".site-header");
+  if (!h) return;
+  function set() { document.documentElement.style.setProperty("--hdr-h", h.offsetHeight + "px"); }
+  set(); window.addEventListener("resize", set); window.addEventListener("load", set);
+})();
+</script>
 <script src="script.js" defer></script>
+<script>
+// ===== Layanan slider: kategori, tombol panah, geser pakai mouse =====
+(function () {
+  const slider = document.getElementById("svcSlider");
+  if (!slider) return;
+  const chips = Array.prototype.slice.call(document.querySelectorAll(".svc-chip"));
+  const cards = Array.prototype.slice.call(slider.querySelectorAll(".card.service"));
+  const prev = document.querySelector(".svc-arrow.prev");
+  const next = document.querySelector(".svc-arrow.next");
+
+  function arrows() {
+    if (!prev || !next) return;
+    prev.disabled = slider.scrollLeft < 8;
+    next.disabled = slider.scrollLeft + slider.clientWidth >= slider.scrollWidth - 8;
+  }
+  chips.forEach(function (chip) {
+    chip.addEventListener("click", function () {
+      const cat = chip.dataset.cat;
+      chips.forEach(function (c) { c.setAttribute("aria-pressed", String(c === chip)); });
+      // switch snapping off while cards change, otherwise the browser re-snaps to the old card
+      slider.style.scrollSnapType = "none";
+      slider.style.scrollBehavior = "auto";
+      cards.forEach(function (card) { card.hidden = !(cat === "all" || card.dataset.cat === cat); });
+      slider.scrollLeft = 0;
+      requestAnimationFrame(function () {
+        requestAnimationFrame(function () {
+          slider.style.scrollSnapType = "";
+          slider.style.scrollBehavior = "";
+          arrows();
+        });
+      });
+      arrows();
+    });
+  });
+  function step(dir) {
+    const first = cards.filter(function (c) { return !c.hidden; })[0];
+    const w = first ? first.getBoundingClientRect().width + 18 : 260;
+    slider.scrollBy({ left: dir * w * 2, behavior: "smooth" });
+  }
+  if (prev) prev.addEventListener("click", function () { step(-1); });
+  if (next) next.addEventListener("click", function () { step(1); });
+  slider.addEventListener("scroll", arrows, { passive: true });
+  window.addEventListener("resize", arrows);
+  arrows();
+
+  // mouse drag (touch screens already swipe by themselves)
+  let down = false, moved = false, startX = 0, startLeft = 0;
+  slider.addEventListener("pointerdown", function (e) {
+    if (e.pointerType !== "mouse" || e.button !== 0) return;
+    down = true; moved = false; startX = e.clientX; startLeft = slider.scrollLeft;
+  });
+  window.addEventListener("pointermove", function (e) {
+    if (!down) return;
+    const dx = e.clientX - startX;
+    if (!moved && Math.abs(dx) > 6) { moved = true; slider.classList.add("dragging"); }
+    if (moved) slider.scrollLeft = startLeft - dx;
+  });
+  window.addEventListener("pointerup", function () {
+    if (!down) return;
+    down = false; slider.classList.remove("dragging");
+  });
+  slider.addEventListener("click", function (e) {      // a drag must not count as a click on a button
+    if (moved) { e.preventDefault(); e.stopPropagation(); moved = false; }
+  }, true);
+  slider.addEventListener("dragstart", function (e) { e.preventDefault(); });
+})();
+</script>
 </body>
 </html>
