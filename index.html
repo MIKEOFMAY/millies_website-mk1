@@ -84,6 +84,23 @@
 #keunggulan{background:linear-gradient(180deg,var(--wave) 0,var(--wave) 72%,var(--bg-alt) 100%)}
 :root:not([data-theme="dark"]) #keunggulan .card{background:#fff}
 </style>
+<style id="hero-bg-style">
+/* ===== Hero: video / foto besar di belakang ===== */
+.hero-bg{position:absolute;inset:0;z-index:0;overflow:hidden;background:url("assets/photos/hero.jpg") center/cover no-repeat}
+.hero-bg video{display:block;width:100%;height:100%;object-fit:cover}
+/* veil: keeps the brown text readable. Make the numbers smaller to show more of the video. */
+.hero-bg::after{content:"";position:absolute;inset:0;
+  background:
+    linear-gradient(180deg,rgba(253,183,19,.85) 0,rgba(253,183,19,0) 150px),
+    linear-gradient(90deg,rgba(253,183,19,.93) 0,rgba(253,183,19,.82) 42%,rgba(253,183,19,.28) 100%)}
+@media(max-width:860px){
+  .hero-bg::after{background:
+    linear-gradient(180deg,rgba(253,183,19,.88) 0,rgba(253,183,19,.78) 55%,rgba(253,183,19,.5) 100%)}
+}
+.hero-grid{position:relative;z-index:1}
+.hero-wave{z-index:2}
+@media (prefers-reduced-motion:reduce){.hero-bg video{display:none}}
+</style>
 
 <script type="application/ld+json">
 {
@@ -135,18 +152,20 @@
 <main id="top">
 
   <section class="hero">
+    <div class="hero-bg" aria-hidden="true">
+      <video src="assets/videos/video - laundry_21.mp4" poster="assets/photos/hero.jpg" autoplay muted loop playsinline preload="auto" onerror="this.remove()"></video>
+    </div>
     <div class="wrap hero-grid">
       <div>
         <p class="eyebrow">Laundry · Permata Hijau Suites</p>
-        <h1>Cucian beres. Hidup lega.</h1>
-        <p class="lead">Kiloan, sepatu, tas, dry clean, permak. Kami jemput, kerjakan, dan antar.</p>
+        <h1>Cucian beres, hidup jadi lebih lega.</h1>
+        <p class="lead">Kiloan, sepatu, tas, dry clean, sampai permak. Serahkan ke kami. Kami jemput, kerjakan dengan teliti, lalu antar kembali ke rumah Anda.</p>
         <div class="cta-row">
           <a class="btn btn-wa" data-wa href="https://wa.me/6281297399978">Pesan di WhatsApp</a>
           <a class="btn btn-ghost" href="#layanan">Lihat Harga</a>
         </div>
       </div>
       <div class="hero-side">
-        <figure class="media media-card" data-label="Video · utama"><video src="assets/videos/video - laundry_20.mp4" width="360" height="360" autoplay muted loop playsinline preload="metadata" onerror="this.parentElement.classList.add('missing');this.remove()"></video></figure>
         <ul class="stats" aria-label="Ringkasan">
         <li><strong data-countup>300+</strong><span>Pelanggan puas</span></li>
         <li><strong data-countup>30+</strong><span>Jenis layanan</span></li>
@@ -161,7 +180,7 @@
   <section id="keunggulan" class="section">
     <div class="wrap">
       <h2>Kenapa Millie's?</h2>
-      <p class="sub">Noda hilang. Bau hilang. Kusut hilang.</p>
+      <p class="sub">Bersih, wangi, dan rapi. Anda tinggal santai, kami yang bekerja.</p>
       <div class="grid g4 reveal">
         <article class="card"><span class="ico">✔</span><h3>Dicuci Teliti</h3><p>Dipilah, dicuci sesuai label, disetrika, lalu dicek lagi.</p></article>
         <article class="card"><span class="ico">★</span><h3>Cuci Ulang*</h3><p>Kurang bersih? Kirim foto dalam 24 jam. Kami cek, lalu cuci ulang kalau perlu.</p></article>
@@ -179,7 +198,7 @@
   <section id="layanan" class="section alt">
     <div class="wrap">
       <h2>Layanan & Harga</h2>
-      <p class="sub">Harga per <span class="price-year">2026</span>, mulai dari. Harga pasti kami kabari lewat WhatsApp sebelum cucian dicuci.</p>
+      <p class="sub">Harga per <span class="price-year">2026</span>, mulai dari. Harga pasti selalu kami kabari dulu lewat WhatsApp sebelum cucian dikerjakan, jadi tidak ada kejutan di akhir.</p>
 
       <div class="svc reveal">
         <div class="svc-chips" role="group" aria-label="Pilih kategori layanan">
@@ -271,7 +290,7 @@
         <p class="svc-hint">Geser untuk lihat layanan lainnya →</p>
       </div>
 
-      <h3 class="subhead">Daftar Harga Lengkap <small class="asof">per <span class="price-year">2026</span></small></h3>
+      <h3 class="subhead">Lihat Semua Harga <small class="asof">per <span class="price-year">2026</span>, mulai dari</small></h3>
       <div class="tabs" role="tablist" aria-label="Kategori harga">
         <button class="tab" type="button" role="tab" id="tab-kiloan" aria-controls="panel-kiloan" aria-selected="true" tabindex="0">Kiloan</button>
         <button class="tab" type="button" role="tab" id="tab-satuan" aria-controls="panel-satuan" aria-selected="false" tabindex="-1">Satuan</button>
@@ -480,14 +499,14 @@
       <p class="subhead-note">Cuci rutin, harga lebih hemat, nol mikir.</p>
       <div class="grid g2 reveal">
         <article class="card service">
-          <div class="smedia"><figure class="media media-card" data-label="Video · Paket Mingguan"><video src="assets/videos/video - laundry_7.mp4" width="360" height="360" autoplay muted loop playsinline preload="metadata" onerror="this.parentElement.classList.add('missing');this.remove()"></video></figure><span class="badge">Lebih hemat</span></div>
+          <div class="smedia"><figure class="media media-card" data-label="Video · Paket Mingguan"><video src="assets/videos/video - laundry_33.mp4" width="360" height="360" autoplay muted loop playsinline preload="metadata" onerror="this.parentElement.classList.add('missing');this.remove()"></video></figure><span class="badge">Lebih hemat</span></div>
           <h3>Paket Mingguan</h3>
           <p>10 kg tiap minggu. Jemput dan antar terjadwal.</p>
           <div class="price"><small class="from">Mulai dari</small>Rp 170.000<small>/minggu</small></div>
           <a class="btn btn-wa btn-sm" data-wa data-wa-msg="Halo, saya tertarik Paket Mingguan." href="https://wa.me/6281297399978">Ambil paket</a>
         </article>
         <article class="card service">
-          <div class="smedia"><figure class="media media-card" data-label="Video · Langganan Bulanan"><video src="assets/videos/video - laundry_18.mp4" width="360" height="360" autoplay muted loop playsinline preload="metadata" onerror="this.parentElement.classList.add('missing');this.remove()"></video></figure></div>
+          <div class="smedia"><figure class="media media-card" data-label="Video · Langganan Bulanan"><video src="assets/videos/video - laundry_32.mp4" width="360" height="360" autoplay muted loop playsinline preload="metadata" onerror="this.parentElement.classList.add('missing');this.remove()"></video></figure></div>
           <h3>Langganan Bulanan</h3>
           <p>40 kg tiap bulan. Cuci rutin, tanpa mikir.</p>
           <div class="price"><small class="from">Mulai dari</small>Rp 640.000<small>/bulan</small></div>
@@ -496,7 +515,7 @@
       </div>
 
       <article class="card biz reveal">
-        <div class="biz-media"><figure class="media media-card" data-label="Video · Gym, Padel, Hotel, Kos & Kantor"><video src="assets/videos/video - laundry_15.mp4" width="360" height="360" autoplay muted loop playsinline preload="metadata" onerror="this.parentElement.classList.add('missing');this.remove()"></video></figure></div>
+        <div class="biz-media"><figure class="media media-card" data-label="Video · Gym, Padel, Hotel, Kos & Kantor"><video src="assets/videos/video - laundry_30.mp4" width="360" height="360" autoplay muted loop playsinline preload="metadata" onerror="this.parentElement.classList.add('missing');this.remove()"></video></figure></div>
         <div>
           <span class="badge">Untuk bisnis</span>
           <h3>Gym, Padel, Hotel, Kos & Kantor</h3>
@@ -551,7 +570,7 @@
 <section id="proses" class="section">
     <div class="wrap">
       <h2>Cara Kami Mencuci</h2>
-      <p class="sub">Enam langkah. Tidak ada yang dilewati.</p>
+      <p class="sub">Enam langkah yang kami kerjakan dengan teliti, satu per satu.</p>
       <ol class="steps reveal">
         <li><b>1</b><h3>Jemput</h3><p>Kurir datang sesuai jadwal.</p></li>
         <li><b>2</b><h3>Periksa</h3><p>Cek noda, kondisi, dan label.</p></li>
@@ -566,7 +585,7 @@
   <section id="testimoni" class="section alt">
     <div class="wrap narrow">
       <h2>Ulasan pelanggan</h2>
-      <p class="sub">Sudah coba Millie's? Ceritakan di Google.</p>
+      <p class="sub">Sudah mencoba Millie's? Kami senang sekali kalau Anda mau berbagi cerita di Google.</p>
       <p><a class="btn btn-wa" href="https://g.page/r/CTvx7pUuik6VEBM/review">Tulis ulasan</a></p>
     </div>
   </section>
@@ -661,7 +680,7 @@
     <div class="wrap narrow">
       <div class="card track">
         <h2>Cek Status Cucian</h2>
-        <p class="sub">Masukkan nomor nota. Kami cek lewat WhatsApp.</p>
+        <p class="sub">Punya nomor nota? Masukkan di sini, kami bantu cek lewat WhatsApp.</p>
         <form id="trackForm" class="track-form">
           <input id="trackInput" type="text" placeholder="Nomor nota, mis. INV-0123" required aria-label="Nomor nota">
           <button class="btn btn-wa" type="submit">Cek Status</button>
@@ -673,7 +692,7 @@
   <section id="lokasi" class="section alt">
     <div class="wrap">
       <h2>Lokasi & Jam Buka</h2>
-      <p class="sub">Mampir, atau pesan antar-jemput.</p>
+      <p class="sub">Silakan mampir ke toko kami, atau pesan antar-jemput lewat WhatsApp.</p>
       <div class="loc-grid">
         <div class="card">
           <h3>Millie's Laundry</h3>
@@ -696,7 +715,7 @@
   <section class="banner">
     <div class="wrap">
       <h2>Lebih banyak waktu untuk orang tersayang.</h2>
-      <p>Urusan cucian? Serahkan ke kami.</p>
+      <p>Urusan cucian? Serahkan ke kami dengan tenang.</p>
       <a class="btn btn-light" data-wa href="https://wa.me/6281297399978">Laundry Sekarang</a>
     </div>
   </section>
