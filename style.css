@@ -381,3 +381,140 @@ input:focus,select:focus{outline:2px solid var(--blue-text);outline-offset:1px}
 .media:not(.missing) video{height:auto}
 .g2 .media-card:not(.missing){aspect-ratio:auto}
 .biz-media .media-card:not(.missing){height:auto;min-height:0}
+
+/* ===== Bigger logo (override, keep at the very bottom) ===== */
+.bar{height:80px}
+.logo{margin-top:6px}
+.logo img{height:280px}
+.site-header.scrolled .logo img{height:72px}
+.hero{padding-top:235px}
+@media(max-width:1100px) and (min-width:901px){
+  .logo img{height:230px}
+  .nav{gap:16px}
+  .hero{padding-top:195px}
+}
+@media(max-width:900px){
+  .logo img{height:130px}
+  .site-header.scrolled .logo img{height:66px}
+  .nav{top:80px;padding-top:64px}
+  .site-header.scrolled .nav{padding-top:8px}
+  .hero{padding-top:150px}
+}
+
+/* ===== Layanan: geser ke samping + kategori ===== */
+.svc-chips{position:relative;z-index:7;display:flex;gap:8px;overflow-x:auto;padding:4px 2px 4px;scrollbar-width:thin}
+.svc-chip{flex:0 0 auto;padding:9px 18px;border-radius:999px;border:2px solid var(--blue);background:transparent;color:var(--blue-text);font:inherit;font-weight:600;font-size:.95rem;cursor:pointer;white-space:nowrap;transition:background .15s,color .15s}
+.svc-chip:hover{background:rgba(43,117,183,.12)}
+.svc-chip[aria-pressed="true"]{background:var(--blue);color:#fff}
+.svc-stage{position:relative}
+.svc-slider{display:flex;gap:18px;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x proximity;scroll-behavior:smooth;
+  padding:40px 18px 40px;margin:-14px -18px -40px;scroll-padding:0 18px;scrollbar-width:none;-webkit-overflow-scrolling:touch;
+  -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 18px,#000 calc(100% - 18px),transparent 100%);
+          mask-image:linear-gradient(90deg,transparent 0,#000 18px,#000 calc(100% - 18px),transparent 100%)}
+.svc-slider::-webkit-scrollbar{display:none}
+.svc-slider.dragging{scroll-snap-type:none;scroll-behavior:auto;cursor:grabbing;user-select:none}
+.svc-slider .card.service{flex:0 0 clamp(212px,72vw,252px);scroll-snap-align:start;padding:14px;
+  transition:transform .28s cubic-bezier(.2,.8,.2,1),box-shadow .28s,opacity .28s}
+.svc-slider .card.service[hidden]{display:none!important}
+.svc-slider .media-card.missing{aspect-ratio:1/1}
+.svc-slider .media video,.svc-slider .media img{transition:transform .5s cubic-bezier(.2,.8,.2,1)}
+.svc-slider .card.service h3{margin-top:2px}
+/* hover: the card lifts and grows, the picture zooms a little, the others dim a little */
+@media (hover:hover){
+  .svc-slider .card.service:hover,.svc-slider .card.service:focus-within{transform:translateY(-10px) scale(1.07);box-shadow:0 20px 38px rgba(96,56,19,.3);z-index:5}
+  .svc-slider .card.service:hover .media video,.svc-slider .card.service:hover .media img{transform:scale(1.07)}
+  .svc-slider:hover .card.service:not(:hover){opacity:.8}
+  .svc-slider{cursor:grab}
+}
+.svc-arrow{position:absolute;top:42%;z-index:6;width:46px;height:46px;border-radius:50%;border:0;background:var(--blue);color:#fff;font-size:1.7rem;line-height:1;cursor:pointer;box-shadow:0 6px 16px rgba(0,0,0,.25);display:none;align-items:center;justify-content:center;transition:transform .15s,opacity .2s}
+.svc-arrow:hover{transform:scale(1.1)}
+.svc-arrow[disabled]{opacity:0;pointer-events:none}
+.svc-arrow.prev{left:-14px}.svc-arrow.next{right:-14px}
+@media (hover:hover) and (min-width:700px){.svc-arrow{display:flex}}
+.svc-hint{margin-top:22px;font-size:.88rem;color:var(--muted);text-align:center}
+@media (prefers-reduced-motion:reduce){
+  .svc-slider{scroll-behavior:auto}
+  .svc-slider .card.service,.svc-slider .media video,.svc-slider .media img{transition:none}
+  .svc-slider .card.service:hover,.svc-slider .card.service:focus-within{transform:none}
+}
+
+/* ===== Tampilan modern: header kaca, kartu lembut, hero bergelombang ===== */
+:root{--wave:#fff6dc;--glass:rgba(253,183,19,0);--glass-on:rgba(253,183,19,.84)}
+:root[data-theme="dark"]{--wave:#24160a;--glass:rgba(36,22,10,.88);--glass-on:rgba(36,22,10,.94)}
+
+/* header: no blue line, frosted glass, sits on top of the hero */
+.site-header{margin-bottom:calc(-1 * var(--hdr-h,83px));border-bottom:0;background:var(--glass);
+  transition:background .25s,box-shadow .25s}
+.site-header.scrolled{background:var(--glass-on);box-shadow:0 8px 26px rgba(96,56,19,.16);
+  -webkit-backdrop-filter:blur(14px) saturate(1.3);backdrop-filter:blur(14px) saturate(1.3)}
+@media(max-width:900px){.nav{border-bottom:0;border-radius:0 0 18px 18px;box-shadow:0 16px 30px rgba(96,56,19,.2)}}
+
+/* the hero now starts at the very top, so it gets the header height as extra room */
+.hero{position:relative;padding-top:calc(var(--hdr-h,83px) + 235px);padding-bottom:120px}
+@media(max-width:1100px) and (min-width:901px){.hero{padding-top:calc(var(--hdr-h,83px) + 195px)}}
+@media(max-width:900px){.hero{padding-top:calc(var(--hdr-h,83px) + 150px);padding-bottom:110px}}
+
+/* number cards: no blue line, soft glass */
+.stats li{background:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.75);
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);box-shadow:0 10px 30px rgba(96,56,19,.1)}
+:root[data-theme="dark"] .stats li{background:rgba(255,248,229,.78);color:var(--brown)}
+:root[data-theme="dark"] .stats li span{color:var(--brown-muted)}
+
+:root:not([data-theme="dark"]) #keunggulan .card{background:#fff}
+
+/* ===== Hero: video / foto besar di belakang ===== */
+.hero-bg{position:absolute;inset:0;z-index:0;overflow:hidden;background:url("assets/photos/hero.jpg") center/cover no-repeat}
+.hero-bg video{display:block;width:100%;height:100%;object-fit:cover}
+/* veil: keeps the brown text readable. Make the numbers smaller to show more of the video. */
+.hero-bg::after{content:"";position:absolute;inset:0;
+  background:
+    linear-gradient(180deg,rgba(253,183,19,.85) 0,rgba(253,183,19,0) 150px),
+    linear-gradient(90deg,rgba(253,183,19,.93) 0,rgba(253,183,19,.82) 42%,rgba(253,183,19,.28) 100%)}
+@media(max-width:860px){
+  .hero-bg::after{background:
+    linear-gradient(180deg,rgba(253,183,19,.88) 0,rgba(253,183,19,.78) 55%,rgba(253,183,19,.5) 100%)}
+}
+.hero-grid{position:relative;z-index:1}
+@media (prefers-reduced-motion:reduce){.hero-bg video{display:none}}
+
+/* ===== Bentuk gelembung: pinggir bergelombang (acak tiap buka) + sudut bulat ===== */
+:root{--radius:30px;--wave-h:90px}
+@media(max-width:700px){:root{--wave-h:56px}}
+
+/* wave on top of every section (JS draws it, a new shape on every visit) */
+main>section,.site-footer{position:relative}
+main>section.section{padding-bottom:96px}
+.banner{padding-bottom:88px}
+main>section.section{--sec-bg:var(--bg)}
+main>section.section.alt{--sec-bg:var(--bg-alt)}
+#keunggulan{--sec-bg:var(--wave);background:var(--wave)}
+.banner{--sec-bg:var(--blue)}
+.site-footer{--sec-bg:var(--footer-bg)}
+.sec-wave{position:absolute;left:0;right:0;top:calc(1px - var(--wave-h));width:100%;height:var(--wave-h);display:block;z-index:2;pointer-events:none}
+.sec-wave path{fill:var(--sec-bg)}
+.sec-bubble{position:absolute;z-index:2;border-radius:50%;pointer-events:none;
+  opacity:var(--o,.5);                                  /* each bubble gets its own see-through level (set by script.js) */
+  background:
+    radial-gradient(circle at 30% 28%,rgba(255,255,255,.9) 0 6%,rgba(255,255,255,0) 24%),
+    radial-gradient(circle at 50% 50%,var(--sec-bg) 0 60%,rgba(255,255,255,.35) 100%);
+  border:1px solid rgba(255,255,255,.55);
+  box-shadow:inset -3px -3px 8px rgba(255,255,255,.3);
+  animation:sbob 7s ease-in-out infinite}
+@keyframes sbob{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+@media (prefers-reduced-motion:reduce){.sec-bubble{animation:none}}
+
+/* rounder, bubble-like frames */
+.card{border-radius:30px}
+.stats li{border-radius:28px}
+.panel{border-radius:30px}
+.media,.media-card,.biz-media .media-card{border-radius:24px}
+.svc-slider .card.service{padding:14px}
+.faq details{border-radius:26px;padding:16px 24px}
+.disclaimer{border-radius:26px;border-left:1px solid var(--line);padding:16px 26px}
+.map{border-radius:30px}
+.ig-grid a{border-radius:24px}
+input,select{border-radius:20px}
+.ico{border-radius:50%}
+.steps li{border-radius:30px}
+.card::after{border-radius:34px}
+.stats li::after{border-radius:32px}

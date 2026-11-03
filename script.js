@@ -284,12 +284,12 @@ if (yearEl) yearEl.textContent = new Date().getFullYear();
 // ===== Click sounds =====
 // Put your 3-4 sound files in assets/sounds/ and list them here (mp3, ogg or wav). Missing files are skipped quietly.
 // Menu links and in-page buttons (Layanan, Lihat Harga, the logo...) play this ONE fixed sound instead of a random one.
-const PAGE_SFX_FILE = "assets/sounds/page.mp3";
+const PAGE_SFX_FILE = "assets/sound/sound - page_button.mp3";
 const SFX_FILES = [
-  "assets/sounds/sfx1.mp3",
-  "assets/sounds/sfx2.mp3",
-  "assets/sounds/sfx3.mp3",
-  "assets/sounds/sfx4.mp3"
+  "assets/sound/sound - button_1.wav",
+  "assets/sound/sound - button_2.wav",
+  "assets/sound/sound - button_3.wav",
+  "assets/sound/sound - button_4.wav"
 ];
 (function () {
   const toggle = document.getElementById("soundToggle");
@@ -454,4 +454,146 @@ document.querySelectorAll(".price-year").forEach(function (el) { el.textContent 
     });
   }, { threshold: 0.4 });
   els.forEach(function (el) { io.observe(el); });
+})();
+
+// ===== Header height (the hero starts under the see-through header, so CSS needs this number) =====
+(function () {
+  var h = document.querySelector(".site-header");
+  if (!h) return;
+  function set() { document.documentElement.style.setProperty("--hdr-h", h.offsetHeight + "px"); }
+  set(); window.addEventListener("resize", set); window.addEventListener("load", set);
+})();
+
+// ===== Missing photo / video: show the striped placeholder instead of a broken box =====
+(function () {
+  function fail(el) {
+    var frame = el.closest(".media");
+    if (frame) frame.classList.add("missing");
+    el.remove();
+  }
+  document.querySelectorAll(".media video, .media img, .hero-bg video").forEach(function (el) {
+    var isVideo = el.tagName === "VIDEO";
+    var broken = isVideo ? (el.error || el.networkState === 3) : (el.complete && el.naturalWidth === 0);
+    if (broken) { fail(el); return; }
+    el.addEventListener("error", function () { fail(el); });
+  });
+})();
+
+// ===== Instagram feed (Behold) =====
+(function () {
+  if (window.__bhldScript) return;
+  window.__bhldScript = true;
+  var s = document.createElement("script");
+  s.type = "module";
+  s.src = "https://w.behold.so/widget.js";
+  setTimeout(function () { document.head.append(s); }, 0);
+})();
+
+// ===== Layanan slider: kategori, tombol panah, geser pakai mouse =====
+(function () {
+  const slider = document.getElementById("svcSlider");
+  if (!slider) return;
+  const chips = Array.prototype.slice.call(document.querySelectorAll(".svc-chip"));
+  const cards = Array.prototype.slice.call(slider.querySelectorAll(".card.service"));
+  const prev = document.querySelector(".svc-arrow.prev");
+  const next = document.querySelector(".svc-arrow.next");
+
+  function arrows() {
+    if (!prev || !next) return;
+    prev.disabled = slider.scrollLeft < 8;
+    next.disabled = slider.scrollLeft + slider.clientWidth >= slider.scrollWidth - 8;
+  }
+  chips.forEach(function (chip) {
+    chip.addEventListener("click", function () {
+      const cat = chip.dataset.cat;
+      chips.forEach(function (c) { c.setAttribute("aria-pressed", String(c === chip)); });
+      // switch snapping off while cards change, otherwise the browser re-snaps to the old card
+      slider.style.scrollSnapType = "none";
+      slider.style.scrollBehavior = "auto";
+      cards.forEach(function (card) { card.hidden = !(cat === "all" || card.dataset.cat === cat); });
+      slider.scrollLeft = 0;
+      requestAnimationFrame(function () {
+        requestAnimationFrame(function () {
+          slider.style.scrollSnapType = "";
+          slider.style.scrollBehavior = "";
+          arrows();
+        });
+      });
+      arrows();
+    });
+  });
+  function step(dir) {
+    const first = cards.filter(function (c) { return !c.hidden; })[0];
+    const w = first ? first.getBoundingClientRect().width + 18 : 260;
+    slider.scrollBy({ left: dir * w * 2, behavior: "smooth" });
+  }
+  if (prev) prev.addEventListener("click", function () { step(-1); });
+  if (next) next.addEventListener("click", function () { step(1); });
+  slider.addEventListener("scroll", arrows, { passive: true });
+  window.addEventListener("resize", arrows);
+  arrows();
+
+  // mouse drag (touch screens already swipe by themselves)
+  let down = false, moved = false, startX = 0, startLeft = 0;
+  slider.addEventListener("pointerdown", function (e) {
+    if (e.pointerType !== "mouse" || e.button !== 0) return;
+    down = true; moved = false; startX = e.clientX; startLeft = slider.scrollLeft;
+  });
+  window.addEventListener("pointermove", function (e) {
+    if (!down) return;
+    const dx = e.clientX - startX;
+    if (!moved && Math.abs(dx) > 6) { moved = true; slider.classList.add("dragging"); }
+    if (moved) slider.scrollLeft = startLeft - dx;
+  });
+  window.addEventListener("pointerup", function () {
+    if (!down) return;
+    down = false; slider.classList.remove("dragging");
+  });
+  slider.addEventListener("click", function (e) {      // a drag must not count as a click on a button
+    if (moved) { e.preventDefault(); e.stopPropagation(); moved = false; }
+  }, true);
+  slider.addEventListener("dragstart", function (e) { e.preventDefault(); });
+})();
+
+// ===== Pinggir bergelombang + gelembung kecil. Bentuknya acak setiap halaman dibuka =====
+(function () {
+  var NS = "http://www.w3.org/2000/svg";
+  function rnd(a, b) { return a + Math.random() * (b - a); }
+  function wavePath() {
+    var n = Math.floor(rnd(4, 8)), pts = [], i;               // 4–7 curves across the width
+    for (i = 0; i <= n; i++) pts.push({ x: (1440 / n) * i, y: rnd(8, 72) });
+    var d = "M0," + pts[0].y.toFixed(1);
+    for (i = 0; i < n; i++) {
+      var a = pts[i], b = pts[i + 1], dx = (b.x - a.x) * rnd(0.35, 0.55);
+      d += " C" + (a.x + dx).toFixed(1) + "," + a.y.toFixed(1) + " " + (b.x - dx).toFixed(1) + "," + b.y.toFixed(1) + " " + b.x.toFixed(1) + "," + b.y.toFixed(1);
+    }
+    return d + " L1440,100 L0,100 Z";
+  }
+  var BUBBLES_MIN = 5, BUBBLES_MAX = 9;                       // bubbles per section (change these two numbers)
+  var targets = document.querySelectorAll("main > section:not(.hero), .site-footer");
+  Array.prototype.forEach.call(targets, function (sec) {
+    var svg = document.createElementNS(NS, "svg");
+    svg.setAttribute("class", "sec-wave");
+    svg.setAttribute("viewBox", "0 0 1440 100");
+    svg.setAttribute("preserveAspectRatio", "none");
+    svg.setAttribute("aria-hidden", "true");
+    var p = document.createElementNS(NS, "path");
+    p.setAttribute("d", wavePath());
+    svg.appendChild(p);
+    sec.insertBefore(svg, sec.firstChild);
+
+    var count = Math.floor(rnd(BUBBLES_MIN, BUBBLES_MAX + 1));
+    for (var i = 0; i < count; i++) {
+      var s = rnd(8, 36), b = document.createElement("span");
+      b.className = "sec-bubble";
+      b.setAttribute("aria-hidden", "true");
+      b.style.width = b.style.height = s.toFixed(0) + "px";
+      b.style.left = rnd(1, 94).toFixed(1) + "%";
+      b.style.top = "calc(" + rnd(-1.2, 0.5).toFixed(2) + " * var(--wave-h) - " + (s / 2).toFixed(0) + "px)";
+      b.style.setProperty("--o", rnd(0.18, 0.7).toFixed(2));  // how see-through: low = almost invisible
+      b.style.animationDuration = rnd(5, 9).toFixed(1) + "s";
+      b.style.animationDelay = (-rnd(0, 6)).toFixed(1) + "s";
+      sec.insertBefore(b, svg.nextSibling);
+    }
+  });
 })();
