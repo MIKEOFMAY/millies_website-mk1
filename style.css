@@ -492,7 +492,7 @@ main>section.section.alt{--sec-bg:var(--bg-alt)}
 .site-footer{--sec-bg:var(--footer-bg)}
 .sec-wave{position:absolute;left:0;right:0;top:calc(1px - var(--wave-h));width:100%;height:var(--wave-h);display:block;z-index:2;pointer-events:none}
 .sec-wave path{fill:var(--sec-bg)}
-.sec-bubble{position:absolute;z-index:2;border-radius:50%;pointer-events:none;
+.sec-bubble{position:absolute;z-index:2;border-radius:50%;cursor:pointer;
   opacity:var(--o,.5);                                  /* each bubble gets its own see-through level (set by script.js) */
   background:
     radial-gradient(circle at 30% 28%,rgba(255,255,255,.9) 0 6%,rgba(255,255,255,0) 24%),
@@ -518,3 +518,15 @@ input,select{border-radius:20px}
 .steps li{border-radius:30px}
 .card::after{border-radius:34px}
 .stats li::after{border-radius:32px}
+
+/* poke & pop (mini game) */
+.sec-bubble::before{content:"";position:absolute;inset:-7px;border-radius:50%}     /* a bigger tap area for small bubbles */
+.sec-bubble:hover{opacity:calc(var(--o,.5) + .3)}
+.sec-bubble.popping{animation:spop .22s ease-out forwards;pointer-events:none}
+@keyframes spop{to{transform:scale(1.45);opacity:0}}
+.pop-ring{position:absolute;z-index:2;border-radius:50%;border:2px solid rgba(255,255,255,.85);pointer-events:none}
+.pop-drop{position:absolute;z-index:2;border-radius:50%;background:rgba(255,255,255,.85);box-shadow:0 0 0 1px rgba(255,255,255,.5);pointer-events:none}
+.pop-score{position:fixed;left:16px;bottom:16px;z-index:45;background:var(--blue);color:#fff;font-weight:700;font-size:.9rem;
+  padding:9px 16px;border-radius:999px;box-shadow:0 8px 20px rgba(0,0,0,.25);pointer-events:none;
+  opacity:0;transform:translateY(10px);transition:opacity .25s,transform .25s}
+.pop-score.show{opacity:1;transform:none}

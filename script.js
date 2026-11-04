@@ -555,6 +555,118 @@ document.querySelectorAll(".price-year").forEach(function (el) { el.textContent 
   slider.addEventListener("dragstart", function (e) { e.preventDefault(); });
 })();
 
+// ===== Bubble game: poke the little background bubbles and they pop =====
+// Sound: put a short pop sound at assets/sounds/pop.mp3. If that file is missing, a soft "pop" is made by the browser instead.
+// It follows the same mute button (🔊) as the other click sounds.
+const BubbleGame = (function () {
+  var POP_SFX_FILE = "assets/sounds/pop.mp3";
+  var RESPAWN_MIN = 2500, RESPAWN_MAX = 6000;      // a new bubble floats in this many milliseconds after one pops
+  var MILESTONES = { 10: "Wah, jago! 10 gelembung pecah 🎉", 25: "25 gelembung! Tangan Anda cepat sekali 🫧", 50: "50 gelembung! Anda juara 🏆" };
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var NS = "http://www.w3.org/2000/svg";
+  function rnd(a, b) { return a + Math.random() * (b - a); }
+
+  // ---- sound ----
+  var clip = new Audio(POP_SFX_FILE), clipBad = false;
+  clip.preload = "auto"; clip.volume = 0.6;
+  clip.addEventListener("error", function () { clipBad = true; });
+  var ctx = null;
+  function soundOn() { try { return localStorage.getItem("sound") !== "off"; } catch (e) { return true; } }
+  function synth() {                                // soft "pop" made by the browser (used when pop.mp3 is missing)
+    try {
+      var AC = window.AudioContext || window.webkitAudioContext;
+      if (!AC) return;
+      if (!ctx) ctx = new AC();
+      if (ctx.state === "suspended") ctx.resume();
+      var t = ctx.currentTime, o = ctx.createOscillator(), g = ctx.createGain();
+      o.type = "sine";
+      o.frequency.setValueAtTime(rnd(520, 900), t);
+      o.frequency.exponentialRampToValueAtTime(120, t + 0.11);
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(0.35, t + 0.008);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + 0.13);
+      o.connect(g); g.connect(ctx.destination);
+      o.start(t); o.stop(t + 0.14);
+    } catch (e) {}
+  }
+  function playPop() {
+    if (!soundOn()) return;
+    if (clipBad) { synth(); return; }
+    try {
+      var a = clip.cloneNode();                      // a copy, so quick pops can overlap
+      a.volume = 0.6;
+      a.playbackRate = rnd(0.9, 1.25);               // slightly different every time
+      var p = a.play();
+      if (p && p.catch) p.catch(synth);
+    } catch (e) { synth(); }
+  }
+
+  // ---- score pill (bottom left) ----
+  var pops = 0, pill = null, hideTimer = null;
+  function showScore() {
+    if (!pill) {
+      pill = document.createElement("div");
+      pill.className = "pop-score";
+      pill.setAttribute("aria-hidden", "true");
+      document.body.appendChild(pill);
+    }
+    pill.textContent = MILESTONES[pops] || ("🫧 " + pops + " gelembung pecah");
+    pill.classList.add("show");
+    clearTimeout(hideTimer);
+    hideTimer = setTimeout(function () { pill.classList.remove("show"); }, MILESTONES[pops] ? 3500 : 2200);
+  }
+
+  // ---- create one bubble ----
+  function spawn(sec, fadeIn) {
+    var s = rnd(8, 36), b = document.createElement("span");
+    b.className = "sec-bubble";
+    b.setAttribute("aria-hidden", "true");
+    b.style.width = b.style.height = s.toFixed(0) + "px";
+    b.style.left = rnd(1, 94).toFixed(1) + "%";
+    b.style.top = "calc(" + rnd(-1.2, 0.5).toFixed(2) + " * var(--wave-h) - " + (s / 2).toFixed(0) + "px)";
+    var o = rnd(0.18, 0.7);
+    b.style.setProperty("--o", o.toFixed(2));                  // how see-through: low = almost invisible
+    b.style.animationDuration = rnd(5, 9).toFixed(1) + "s";
+    b.style.animationDelay = (-rnd(0, 6)).toFixed(1) + "s";
+    if (fadeIn && b.animate) b.animate([{ opacity: 0 }, { opacity: o }], { duration: 800, easing: "ease-out" });   // a new bubble fades in
+    b.addEventListener("pointerdown", function (e) { e.preventDefault(); pop(b, sec); });
+    return b;
+  }
+
+  // ---- pop it ----
+  function pop(b, sec) {
+    if (b._popped) return;
+    b._popped = true;
+    playPop();
+    pops++; showScore();
+    var cx = b.offsetLeft + b.offsetWidth / 2, cy = b.offsetTop + b.offsetHeight / 2, size = b.offsetWidth;
+
+    if (reduce) { b.remove(); }
+    else {
+      b.classList.add("popping");
+      setTimeout(function () { b.remove(); }, 230);
+      var ring = document.createElement("span");                   // a ring that spreads out
+      ring.className = "pop-ring";
+      ring.style.cssText = "left:" + cx + "px;top:" + cy + "px;width:" + size + "px;height:" + size + "px";
+      sec.appendChild(ring);
+      ring.animate([{ transform: "translate(-50%,-50%) scale(.7)", opacity: .9 }, { transform: "translate(-50%,-50%) scale(2.1)", opacity: 0 }],
+        { duration: 380, easing: "ease-out" }).onfinish = function () { ring.remove(); };
+      var n = 6 + Math.round(size / 9);                            // tiny droplets fly outwards
+      for (var i = 0; i < n; i++) {
+        var d = document.createElement("span"), ds = rnd(3, 7), ang = rnd(0, Math.PI * 2), dist = rnd(size * 0.7, size * 1.5 + 14);
+        d.className = "pop-drop";
+        d.style.cssText = "left:" + cx + "px;top:" + cy + "px;width:" + ds + "px;height:" + ds + "px";
+        sec.appendChild(d);
+        d.animate([{ transform: "translate(-50%,-50%) scale(1)", opacity: .95 },
+                   { transform: "translate(calc(-50% + " + (Math.cos(ang) * dist).toFixed(1) + "px),calc(-50% + " + (Math.sin(ang) * dist).toFixed(1) + "px)) scale(.3)", opacity: 0 }],
+          { duration: rnd(350, 600), easing: "cubic-bezier(.2,.7,.3,1)" }).onfinish = (function (el) { return function () { el.remove(); }; })(d);
+      }
+    }
+    setTimeout(function () { sec.appendChild(spawn(sec, true)); }, rnd(RESPAWN_MIN, RESPAWN_MAX));   // a new bubble floats in
+  }
+  return { spawn: spawn };
+})();
+
 // ===== Pinggir bergelombang + gelembung kecil. Bentuknya acak setiap halaman dibuka =====
 (function () {
   var NS = "http://www.w3.org/2000/svg";
@@ -583,17 +695,6 @@ document.querySelectorAll(".price-year").forEach(function (el) { el.textContent 
     sec.insertBefore(svg, sec.firstChild);
 
     var count = Math.floor(rnd(BUBBLES_MIN, BUBBLES_MAX + 1));
-    for (var i = 0; i < count; i++) {
-      var s = rnd(8, 36), b = document.createElement("span");
-      b.className = "sec-bubble";
-      b.setAttribute("aria-hidden", "true");
-      b.style.width = b.style.height = s.toFixed(0) + "px";
-      b.style.left = rnd(1, 94).toFixed(1) + "%";
-      b.style.top = "calc(" + rnd(-1.2, 0.5).toFixed(2) + " * var(--wave-h) - " + (s / 2).toFixed(0) + "px)";
-      b.style.setProperty("--o", rnd(0.18, 0.7).toFixed(2));  // how see-through: low = almost invisible
-      b.style.animationDuration = rnd(5, 9).toFixed(1) + "s";
-      b.style.animationDelay = (-rnd(0, 6)).toFixed(1) + "s";
-      sec.insertBefore(b, svg.nextSibling);
-    }
+    for (var i = 0; i < count; i++) sec.insertBefore(BubbleGame.spawn(sec, false), svg.nextSibling);
   });
 })();
