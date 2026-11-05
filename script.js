@@ -284,12 +284,12 @@ if (yearEl) yearEl.textContent = new Date().getFullYear();
 // ===== Click sounds =====
 // Put your 3-4 sound files in assets/sounds/ and list them here (mp3, ogg or wav). Missing files are skipped quietly.
 // Menu links and in-page buttons (Layanan, Lihat Harga, the logo...) play this ONE fixed sound instead of a random one.
-const PAGE_SFX_FILE = "assets/sound/sound - page_button.mp3";
+const PAGE_SFX_FILE = "assets/sound/button_mainpage.mp3";
 const SFX_FILES = [
-  "assets/sound/sound - button_1.wav",
-  "assets/sound/sound - button_2.wav",
-  "assets/sound/sound - button_3.wav",
-  "assets/sound/sound - button_4.wav"
+  "assets/sound/button_bubble_2.wav",
+  "assets/sound/button_bubble_3.wav",
+  "assets/sound/button_bubble_4.wav",
+  "assets/sound/button_bubble_5.wav"
 ];
 (function () {
   const toggle = document.getElementById("soundToggle");
@@ -559,7 +559,7 @@ document.querySelectorAll(".price-year").forEach(function (el) { el.textContent 
 // Sound: put a short pop sound at assets/sounds/pop.mp3. If that file is missing, a soft "pop" is made by the browser instead.
 // It follows the same mute button (🔊) as the other click sounds.
 const BubbleGame = (function () {
-  var POP_SFX_FILE = "assets/sounds/pop.mp3";
+  var POP_SFX_FILE = "assets/sound/button_bubble_1.mp3";
   var RESPAWN_MIN = 2500, RESPAWN_MAX = 6000;      // a new bubble floats in this many milliseconds after one pops
   var MILESTONES = { 10: "Wah, jago! 10 gelembung pecah 🎉", 25: "25 gelembung! Tangan Anda cepat sekali 🫧", 50: "50 gelembung! Anda juara 🏆" };
   var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
