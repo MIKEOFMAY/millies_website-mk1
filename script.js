@@ -668,30 +668,45 @@ const BubbleGame = (function () {
 })();
 
 // ===== Pinggir bergelombang + gelembung kecil. Bentuknya acak setiap halaman dibuka =====
+// Gelombang bergoyang pelan seperti air sabun. Kalau pengunjung scroll cepat, gelombang ikut
+// "dikocok" seperti botol air yang digoyang keras, lalu pelan-pelan tenang lagi.
 (function () {
   var NS = "http://www.w3.org/2000/svg";
   function rnd(a, b) { return a + Math.random() * (b - a); }
-  // Satu gelombang = beberapa titik + rasio lengkung. Beberapa "bingkai" dari titik yang sama
-  // digeser sedikit, lalu dimorf pelan-pelan (seperti air sabun yang bergoyang).
-  var SWAY = 50;                                              // seberapa jauh gelombang bergoyang (px di skala 100). Kecilkan = lebih tenang
-  var SPEED_MIN = 10, SPEED_MAX = 30;                          // detik per putaran. Besarkan = lebih lambat
-  function buildWave() {
-    var n = Math.floor(rnd(4, 8)), pts = [], rat = [], i;     // 4–7 curves across the width
-    for (i = 0; i <= n; i++) pts.push({ x: (1440 / n) * i, y: rnd(16, 66) });
-    for (i = 0; i < n; i++) rat.push(rnd(0.35, 0.55));
-    function frame(sway) {
-      var q = pts.map(function (p) { return { x: p.x, y: Math.max(4, Math.min(80, p.y + (sway ? rnd(-SWAY, SWAY) : 0))) }; });
-      var d = "M0," + q[0].y.toFixed(1);
-      for (i = 0; i < n; i++) {
-        var a = q[i], b = q[i + 1], dx = (b.x - a.x) * rat[i];
-        d += " C" + (a.x + dx).toFixed(1) + "," + a.y.toFixed(1) + " " + (b.x - dx).toFixed(1) + "," + b.y.toFixed(1) + " " + b.x.toFixed(1) + "," + b.y.toFixed(1);
-      }
-      return d + " L1440,100 L0,100 Z";
-    }
-    return [frame(false), frame(true), frame(true), frame(true)];
-  }
+  // ---- Atur di sini ----
+  var SWAY = 50;                       // goyangan pelan saat diam (skala 100). Kecilkan = lebih tenang
+  var SPEED_MIN = 10, SPEED_MAX = 30;  // detik per putaran goyangan pelan. Besarkan = lebih lambat
+  var SHAKE = 34;                      // kekuatan kocokan saat scroll cepat. Besarkan = lebih heboh, 0 = matikan
+  var SHAKE_FREQ = 0.017;              // kecepatan kocokan (besar = lebih cepat getar)
+  var SENS_MIN = 0.8, SENS_MAX = 3;    // kecepatan scroll (px per ms): mulai terasa di 0.8, penuh di 3
+  var SETTLE = 0.965;                  // makin kecil makin cepat tenang (per 1/60 detik)
+  var BUBBLES_MIN = 5, BUBBLES_MAX = 9;   // bubbles per section (change these two numbers)
+  // ----------------------
   var calm = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  var BUBBLES_MIN = 5, BUBBLES_MAX = 9;                       // bubbles per section (change these two numbers)
+  var waves = [];
+  function clampY(y) { return y < 2 ? 2 : y > 94 ? 94 : y; }
+  function makeWave() {
+    var n = Math.floor(rnd(4, 8)), pts = [], rat = [], i;      // 4–7 curves across the width
+    for (i = 0; i <= n; i++) pts.push({ x: (1440 / n) * i, y: rnd(16, 66), ph: rnd(0, 6.283), w: 6.283 / (rnd(SPEED_MIN, SPEED_MAX) * 1000) });
+    for (i = 0; i < n; i++) rat.push(rnd(0.35, 0.55));
+    return { n: n, pts: pts, rat: rat, ph: rnd(0, 6.283), vis: true, path: null };
+  }
+  function draw(wv, t, E) {
+    var n = wv.n, pts = wv.pts, q = [], i, p, amp = E * SHAKE;
+    function shake(x, ph) { return amp * Math.sin(t * SHAKE_FREQ - x * 0.0065 + ph); }
+    for (i = 0; i <= n; i++) {
+      p = pts[i];
+      q.push(clampY(p.y + SWAY * Math.sin(t * p.w + p.ph) + (amp ? shake(p.x, wv.ph + i * 1.3) : 0)));
+    }
+    var d = "M0," + q[0].toFixed(1);
+    for (i = 0; i < n; i++) {
+      var a = pts[i], b = pts[i + 1], dx = (b.x - a.x) * wv.rat[i];
+      var c1 = q[i], c2 = q[i + 1];
+      if (amp) { c1 = clampY(c1 + shake(a.x + dx, wv.ph + 0.9 + i)); c2 = clampY(c2 + shake(b.x - dx, wv.ph + 2.1 + i)); }   // lengkung ikut "memuncrat"
+      d += " C" + (a.x + dx).toFixed(1) + "," + c1.toFixed(1) + " " + (b.x - dx).toFixed(1) + "," + c2.toFixed(1) + " " + b.x.toFixed(1) + "," + q[i + 1].toFixed(1);
+    }
+    wv.path.setAttribute("d", d + " L1440,100 L0,100 Z");
+  }
   var targets = document.querySelectorAll("main > section:not(.hero), .site-footer");
   Array.prototype.forEach.call(targets, function (sec) {
     var svg = document.createElementNS(NS, "svg");
@@ -700,29 +715,34 @@ const BubbleGame = (function () {
     svg.setAttribute("preserveAspectRatio", "none");
     svg.setAttribute("aria-hidden", "true");
     var p = document.createElementNS(NS, "path");
-    var fr = buildWave();
-    p.setAttribute("d", fr[0]);
+    var wv = makeWave(); wv.path = p; waves.push(wv);
+    draw(wv, 0, 0);
     svg.appendChild(p);
-    if (!calm) {                                               // gerakan lembut; mati kalau pengunjung memilih "kurangi animasi"
-      var an = document.createElementNS(NS, "animate");
-      an.setAttribute("attributeName", "d");
-      an.setAttribute("values", [fr[0], fr[1], fr[2], fr[3], fr[0]].join(";"));
-      an.setAttribute("dur", rnd(SPEED_MIN, SPEED_MAX).toFixed(1) + "s");
-      an.setAttribute("begin", "-" + rnd(0, 8).toFixed(1) + "s");   // tiap bagian mulai di fase berbeda
-      an.setAttribute("repeatCount", "indefinite");
-      an.setAttribute("calcMode", "spline");
-      an.setAttribute("keySplines", ".45 .05 .55 .95;.45 .05 .55 .95;.45 .05 .55 .95;.45 .05 .55 .95");
-      p.appendChild(an);
-      if ("IntersectionObserver" in window && svg.pauseAnimations) {   // hemat baterai: berhenti saat tidak terlihat
-        new IntersectionObserver(function (e) {
-          var on = e[e.length - 1].isIntersecting;
-          if (on) svg.unpauseAnimations(); else svg.pauseAnimations();
-        }, { rootMargin: "200px" }).observe(svg);
-      }
-    }
     sec.insertBefore(svg, sec.firstChild);
-
+    if ("IntersectionObserver" in window) {                   // hemat baterai: yang di luar layar tidak digambar
+      wv.vis = false;
+      new IntersectionObserver(function (e) { wv.vis = e[e.length - 1].isIntersecting; }, { rootMargin: "200px" }).observe(svg);
+    }
     var count = Math.floor(rnd(BUBBLES_MIN, BUBBLES_MAX + 1));
     for (var i = 0; i < count; i++) sec.insertBefore(BubbleGame.spawn(sec, false), svg.nextSibling);
   });
+
+  if (calm || !waves.length) return;                          // "kurangi animasi": gelombang diam
+  var E = 0, lastY = window.pageYOffset, lastT = performance.now(), frame = 0;
+  function loop(now) {
+    var dt = Math.max(1, now - lastT), y = window.pageYOffset;
+    var v = Math.abs(y - lastY) / dt;                         // kecepatan scroll, px per ms
+    lastY = y; lastT = now;
+    var target = Math.max(0, Math.min(1, (v - SENS_MIN) / (SENS_MAX - SENS_MIN)));
+    if (target > E) E += (target - E) * 0.3;                  // naik cepat
+    else E *= Math.pow(SETTLE, dt / 16.7);                    // turun pelan: air masih bergejolak sebentar
+    if (E < 0.005) E = 0;
+    frame++;
+    if (E > 0 || frame % 2 === 0) {                           // saat tenang cukup 30 gambar per detik
+      for (var i = 0; i < waves.length; i++) if (waves[i].vis) draw(waves[i], now, E);
+    }
+    window.__waveEnergy = E;
+    requestAnimationFrame(loop);
+  }
+  requestAnimationFrame(loop);
 })();
