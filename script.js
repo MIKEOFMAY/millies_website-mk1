@@ -284,12 +284,12 @@ if (yearEl) yearEl.textContent = new Date().getFullYear();
 // ===== Click sounds =====
 // Put your 3-4 sound files in assets/sounds/ and list them here (mp3, ogg or wav). Missing files are skipped quietly.
 // Menu links and in-page buttons (Layanan, Lihat Harga, the logo...) play this ONE fixed sound instead of a random one.
-const PAGE_SFX_FILE = "assets/sound/button_mainpage.mp3";
+const PAGE_SFX_FILE = "assets/sounds/page.mp3";
 const SFX_FILES = [
-  "assets/sound/button_bubble_2.wav",
-  "assets/sound/button_bubble_3.wav",
-  "assets/sound/button_bubble_4.wav",
-  "assets/sound/button_bubble_5.wav"
+  "assets/sounds/sfx1.mp3",
+  "assets/sounds/sfx2.mp3",
+  "assets/sounds/sfx3.mp3",
+  "assets/sounds/sfx4.mp3"
 ];
 (function () {
   const toggle = document.getElementById("soundToggle");
@@ -559,7 +559,7 @@ document.querySelectorAll(".price-year").forEach(function (el) { el.textContent 
 // Sound: put a short pop sound at assets/sounds/pop.mp3. If that file is missing, a soft "pop" is made by the browser instead.
 // It follows the same mute button (🔊) as the other click sounds.
 const BubbleGame = (function () {
-  var POP_SFX_FILE = "assets/sound/button_bubble_1.mp3";
+  var POP_SFX_FILE = "assets/sounds/pop.mp3";
   var RESPAWN_MIN = 2500, RESPAWN_MAX = 6000;      // a new bubble floats in this many milliseconds after one pops
   var MILESTONES = { 10: "Wah, jago! 10 gelembung pecah 🎉", 25: "25 gelembung! Tangan Anda cepat sekali 🫧", 50: "50 gelembung! Anda juara 🏆" };
   var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -671,16 +671,26 @@ const BubbleGame = (function () {
 (function () {
   var NS = "http://www.w3.org/2000/svg";
   function rnd(a, b) { return a + Math.random() * (b - a); }
-  function wavePath() {
-    var n = Math.floor(rnd(4, 8)), pts = [], i;               // 4–7 curves across the width
-    for (i = 0; i <= n; i++) pts.push({ x: (1440 / n) * i, y: rnd(8, 72) });
-    var d = "M0," + pts[0].y.toFixed(1);
-    for (i = 0; i < n; i++) {
-      var a = pts[i], b = pts[i + 1], dx = (b.x - a.x) * rnd(0.35, 0.55);
-      d += " C" + (a.x + dx).toFixed(1) + "," + a.y.toFixed(1) + " " + (b.x - dx).toFixed(1) + "," + b.y.toFixed(1) + " " + b.x.toFixed(1) + "," + b.y.toFixed(1);
+  // Satu gelombang = beberapa titik + rasio lengkung. Beberapa "bingkai" dari titik yang sama
+  // digeser sedikit, lalu dimorf pelan-pelan (seperti air sabun yang bergoyang).
+  var SWAY = 50;                                              // seberapa jauh gelombang bergoyang (px di skala 100). Kecilkan = lebih tenang
+  var SPEED_MIN = 10, SPEED_MAX = 30;                          // detik per putaran. Besarkan = lebih lambat
+  function buildWave() {
+    var n = Math.floor(rnd(4, 8)), pts = [], rat = [], i;     // 4–7 curves across the width
+    for (i = 0; i <= n; i++) pts.push({ x: (1440 / n) * i, y: rnd(16, 66) });
+    for (i = 0; i < n; i++) rat.push(rnd(0.35, 0.55));
+    function frame(sway) {
+      var q = pts.map(function (p) { return { x: p.x, y: Math.max(4, Math.min(80, p.y + (sway ? rnd(-SWAY, SWAY) : 0))) }; });
+      var d = "M0," + q[0].y.toFixed(1);
+      for (i = 0; i < n; i++) {
+        var a = q[i], b = q[i + 1], dx = (b.x - a.x) * rat[i];
+        d += " C" + (a.x + dx).toFixed(1) + "," + a.y.toFixed(1) + " " + (b.x - dx).toFixed(1) + "," + b.y.toFixed(1) + " " + b.x.toFixed(1) + "," + b.y.toFixed(1);
+      }
+      return d + " L1440,100 L0,100 Z";
     }
-    return d + " L1440,100 L0,100 Z";
+    return [frame(false), frame(true), frame(true), frame(true)];
   }
+  var calm = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var BUBBLES_MIN = 5, BUBBLES_MAX = 9;                       // bubbles per section (change these two numbers)
   var targets = document.querySelectorAll("main > section:not(.hero), .site-footer");
   Array.prototype.forEach.call(targets, function (sec) {
@@ -690,8 +700,26 @@ const BubbleGame = (function () {
     svg.setAttribute("preserveAspectRatio", "none");
     svg.setAttribute("aria-hidden", "true");
     var p = document.createElementNS(NS, "path");
-    p.setAttribute("d", wavePath());
+    var fr = buildWave();
+    p.setAttribute("d", fr[0]);
     svg.appendChild(p);
+    if (!calm) {                                               // gerakan lembut; mati kalau pengunjung memilih "kurangi animasi"
+      var an = document.createElementNS(NS, "animate");
+      an.setAttribute("attributeName", "d");
+      an.setAttribute("values", [fr[0], fr[1], fr[2], fr[3], fr[0]].join(";"));
+      an.setAttribute("dur", rnd(SPEED_MIN, SPEED_MAX).toFixed(1) + "s");
+      an.setAttribute("begin", "-" + rnd(0, 8).toFixed(1) + "s");   // tiap bagian mulai di fase berbeda
+      an.setAttribute("repeatCount", "indefinite");
+      an.setAttribute("calcMode", "spline");
+      an.setAttribute("keySplines", ".45 .05 .55 .95;.45 .05 .55 .95;.45 .05 .55 .95;.45 .05 .55 .95");
+      p.appendChild(an);
+      if ("IntersectionObserver" in window && svg.pauseAnimations) {   // hemat baterai: berhenti saat tidak terlihat
+        new IntersectionObserver(function (e) {
+          var on = e[e.length - 1].isIntersecting;
+          if (on) svg.unpauseAnimations(); else svg.pauseAnimations();
+        }, { rootMargin: "200px" }).observe(svg);
+      }
+    }
     sec.insertBefore(svg, sec.firstChild);
 
     var count = Math.floor(rnd(BUBBLES_MIN, BUBBLES_MAX + 1));
